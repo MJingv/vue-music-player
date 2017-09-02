@@ -74,15 +74,16 @@ export default {
     _getDiscList() {
       getDiscList().then((res) => {
         if (res.code === ERR_OK) {
-          
+
           this.discList = res.data.list
+        console.log(res.data.list);
         }
 
       })
     },
     loadImage(){
 //知道一张图片就可以
-      console.log('img is load');
+
       if(!this.checkLoaded  ){
           this.$refs.scroll.refresh()
           this.checkLoaded = true

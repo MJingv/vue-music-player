@@ -33,7 +33,7 @@ export default {
   methods: {
     selectSinger(singer) {
       this.$router.push({
-        path: `/singer/${singer.id}`
+        path: `/singer/${singer.singerId}`
       })
       this.setSinger(singer)
     },
@@ -60,7 +60,7 @@ export default {
           map.hot.items.push(new Singer({
             name: i.Fsinger_name,
             id: i.Fsinger_mid,
-
+            singerId:i.Fsinger_id,
           }))
         }
 
@@ -75,6 +75,7 @@ export default {
         map[key].items.push(new Singer({
           name: i.Fsinger_name,
           id: i.Fsinger_mid,
+          singerId:i.Fsinger_id,
         }))
       })
 
