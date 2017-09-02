@@ -1,4 +1,4 @@
-# vue-music-player
+# vue-test-project
 
 > A Vue.js project
 
@@ -18,4 +18,8 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+```
+axios  ---  fix the data exchange
+better-scroll  ---  perfect the scroll function 
+v-lazy  ---  use the v-lazy-load to lazy load imgs
+
