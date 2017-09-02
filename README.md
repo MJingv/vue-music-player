@@ -23,3 +23,7 @@ axios  ---  fix the data exchange
 better-scroll  ---  perfect the scroll function 
 v-lazy  ---  use the v-lazy-load to lazy load imgs
 
+
+
+```
+music-list  ---  封装css3各浏览器等prefixStyle 优化歌手歌曲列表的bg-img的scale放大缩小、blur动态高斯模糊、动态旋转隐藏信息等交互操作
