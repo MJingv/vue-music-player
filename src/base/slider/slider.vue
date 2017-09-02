@@ -1,10 +1,10 @@
 <template>
-  <div class="slide" ref="slide">
-    <div class="slide-group" ref="slideGroup">
+  <div class="slider" ref="slider">
+    <div class="slider-group" ref="sliderGroup">
       <slot>
       </slot>
     </div>
-    <div  class="dots" v-if="showDot">
+    <div class="dots">
       <span class="dot" :class="{active: currentPageIndex === index }" v-for="(item, index) in dots"></span>
     </div>
   </div>
@@ -28,14 +28,6 @@
       interval: {
         type: Number,
         default: 4000
-      },
-      showDot: {
-        type: Boolean,
-        default: true
-      },
-      click: {
-        type: Boolean,
-        default: true
       }
     },
     data() {
@@ -44,15 +36,11 @@
         currentPageIndex: 0
       }
     },
-
-
     mounted() {
       setTimeout(() => {
-        this._setSlideWidth()
-        if (this.showDot) {
-          this._initDots()
-        }
-        this._initSlide()
+        this._setSliderWidth()
+        this._initDots()
+        this._initSlider()
 
         if (this.autoPlay) {
           this._play()
@@ -60,130 +48,97 @@
       }, 20)
 
       window.addEventListener('resize', () => {
-        if (!this.slide || !this.slide.enabled) {
+        if (!this.slider) {
           return
         }
-        clearTimeout(this.resizeTimer)
-        this.resizeTimer = setTimeout(() => {
-          if (this.slide.isInTransition) {
-            this._onScrollEnd()
-          } else {
-            if (this.autoPlay) {
-              this._play()
-            }
-          }
-          this.refresh()
-        }, 60)
+        this._setSliderWidth(true)
+        this.slider.refresh()
       })
     },
     activated() {
-      this.slide.enable()
-      let pageIndex = this.slide.getCurrentPage().pageX
-      if (pageIndex > this.dots.length) {
-        pageIndex = pageIndex % this.dots.length
-      }
-      this.slide.goToPage(pageIndex, 0, 0)
-      if (this.loop) {
-        pageIndex -= 1
-      }
-      this.currentPageIndex = pageIndex
       if (this.autoPlay) {
         this._play()
       }
     },
     deactivated() {
-      this.slide.disable()
       clearTimeout(this.timer)
     },
     beforeDestroy() {
-      this.slide.disable()
       clearTimeout(this.timer)
     },
-
-
     methods: {
-      refresh() {
-        this._setSlideWidth(true)
-        this.slide.refresh()
-      },
-      _setSlideWidth(isResize) {
-        this.children = this.$refs.slideGroup.children
+      _setSliderWidth(isResize) {
+        this.children = this.$refs.sliderGroup.children
 
         let width = 0
-        let slideWidth = this.$refs.slide.clientWidth
+        let sliderWidth = this.$refs.slider.clientWidth
         for (let i = 0; i < this.children.length; i++) {
           let child = this.children[i]
-          addClass(child, 'slide-item')
+          addClass(child, 'slider-item')
 
-          child.style.width = slideWidth + 'px'
-          width += slideWidth
+          child.style.width = sliderWidth + 'px'
+          width += sliderWidth
         }
         if (this.loop && !isResize) {
-          width += 2 * slideWidth
+          width += 2 * sliderWidth
         }
-        this.$refs.slideGroup.style.width = width + 'px'
+        this.$refs.sliderGroup.style.width = width + 'px'
       },
-      _initSlide() {
-        this.slide = new BScroll(this.$refs.slide, {
+      _initSlider() {
+        this.slider = new BScroll(this.$refs.slider, {
           scrollX: true,
-          eventPassthrough: 'vertical',
+          scrollY: false,
           momentum: false,
-          snap: {
-            loop: this.loop,
-            threshold: 0.3,
-            speed: 400
-          },
-          click: this.click
+          snap: true,
+          snapLoop: this.loop,
+          snapThreshold: 0.3,
+          snapSpeed: 400
         })
 
-        this.slide.on('scrollEnd', this._onScrollEnd)
+        this.slider.on('scrollEnd', () => {
+          let pageIndex = this.slider.getCurrentPage().pageX
+          if (this.loop) {
+            pageIndex -= 1
+          }
+          this.currentPageIndex = pageIndex
 
-        this.slide.on('touchend', () => {
           if (this.autoPlay) {
             this._play()
           }
         })
 
-        this.slide.on('beforeScrollStart', () => {
+        this.slider.on('beforeScrollStart', () => {
           if (this.autoPlay) {
             clearTimeout(this.timer)
           }
         })
       },
-      _onScrollEnd() {
-        let pageIndex = this.slide.getCurrentPage().pageX
-        if (this.loop) {
-          pageIndex -= 1
-        }
-        this.currentPageIndex = pageIndex
-        if (this.autoPlay) {
-          this._play()
-        }
-      },
       _initDots() {
         this.dots = new Array(this.children.length)
       },
       _play() {
-        let pageIndex = this.slide.getCurrentPage().pageX + 1
-        clearTimeout(this.timer)
+        let pageIndex = this.currentPageIndex + 1
+        if (this.loop) {
+          pageIndex += 1
+        }
         this.timer = setTimeout(() => {
-          this.slide.goToPage(pageIndex, 0, 400)
+          this.slider.goToPage(pageIndex, 0, 400)
         }, this.interval)
       }
     }
   }
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
 
-  .slide
+  .slider
     min-height: 1px
-    .slide-group
+    .slider-group
       position: relative
       overflow: hidden
       white-space: nowrap
-      .slide-item
+      .slider-item
         float: left
         box-sizing: border-box
         overflow: hidden
@@ -201,7 +156,6 @@
       right: 0
       left: 0
       bottom: 12px
-      transform: translateZ(1px)
       text-align: center
       font-size: 0
       .dot
