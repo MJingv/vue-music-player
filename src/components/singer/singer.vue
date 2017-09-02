@@ -5,7 +5,7 @@
 </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script >
 import {
   getSingerList
 } from 'api/singer'
