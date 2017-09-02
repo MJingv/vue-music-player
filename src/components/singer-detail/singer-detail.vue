@@ -1,9 +1,7 @@
 <template>
-
-  <transition name="slide">
-<div class="singer-detail"></div>
-  </transition>
-
+<transition name="slide">
+  <div class="singer-detail"></div>
+</transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -16,7 +14,9 @@ import {
 import {
   mapGetters
 } from 'vuex'
-
+import {
+  createSong
+} from 'common/js/song'
 export default {
   computed: {
 
@@ -26,23 +26,42 @@ export default {
   },
   data() {
     return {
-      songs: []
+      songs: [],
     }
   },
   created() {
     this._getDetail()
 
   },
-  methods:{
-  _getDetail(){
-    getSingerDetail(this.singer.id).then((res)=>{
-      if(res.code == ERR_OK){
-        console.log(res.data.list);
-      }
-    })
-  }
-  }
+  methods: {
 
+    _getDetail() {
+      if (!this.singer.id) {
+        //回退到singer路由
+        this.$router.push('/singer')
+        return
+      }
+      getSingerDetail(this.singer.id).then((res) => {
+        if (res.code == ERR_OK) {
+          this.songs = this._normalizeSongs(res.data.list)
+          console.log(this.songs);
+        }
+      })
+    },
+    _normalizeSongs(list) {
+      let ret = []
+      list.forEach((item) => {
+        let {
+          musicData
+        } = item
+        if (musicData.songid && musicData.albummid) {
+          ret.push(createSong(musicData))
+        }
+      })
+      return ret
+    }
+
+  },
 }
 </script>
 
