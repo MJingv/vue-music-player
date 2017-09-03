@@ -22,18 +22,23 @@
         </div>
       </div>
       <div class="bottom">
+        <div class="progress-wrapper">
+          <span class="time time-l">{{format(currentTime)}}</span>
+          <div class="progress-bar-wrapper"></div>
+          <span class="time time-r">{{format(currentSong.duration)}}</span>
+        </div>
         <div class="operators">
           <div class="icon i-left">
             <i class="icon-sequence"></i>
           </div>
           <div class="icon i-left" :class="disableCls">
-            <i class="icon-prev" @click="prev" ></i>
+            <i class="icon-prev" @click="prev"></i>
           </div>
           <div class="icon i-center" :class="disableCls">
-            <i :class="playIcon" @click="togglePlaying" ></i>
+            <i :class="playIcon" @click="togglePlaying"></i>
           </div>
           <div class="icon i-right" :class="disableCls">
-            <i class="icon-next" @click="next" ></i>
+            <i class="icon-next" @click="next"></i>
           </div>
           <div class="icon i-right">
             <i class="icon icon-not-favorite"></i>
@@ -65,7 +70,7 @@
 
     </div>
   </transition>
-  <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error">
+  <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime">
 
   </audio>
 </div>
@@ -87,11 +92,22 @@ export default {
   data() {
     return {
       songReady: false,
+      currentTime: 0,
 
     }
   },
 
   methods: {
+    format(interval) {
+      interval = interval | 0
+      let minute = interval / 60 | 0
+      let second = (interval % 60 + '').padStart(2, '0')
+      return `${minute}:${second}`
+    },
+    updateTime(e) {
+      this.currentTime = e.target.currentTime
+    },
+
     error() {
       //如果歌曲出现错误，直接赋值以免影响之后操作
       this.songReady = true
