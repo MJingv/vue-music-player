@@ -30,7 +30,10 @@ create-keyframe-animation  ---  利用js钩子实现动画，用js实现css3的
 
 
 ```
-music-list  ---  封装css3各浏览器等prefixStyle 优化歌手歌曲列表的bg-img的scale放大缩小、blur动态高斯模糊、动态旋转隐藏信息等交互操作
+music-list  ---  封装css3各浏览器等prefixStyle 
+                 优化歌手歌曲列表的bg-img的scale放大缩小、blur动态高斯模糊、动态旋转隐藏信息等交互操作
 
-
+playt  ---  有全屏播放器和mini播放器
+            增加各种炫酷动画交互效果：大小屏飞入弹出、切换渐变移动等
+            vue-transtion动画钩子 + create-keyframe-animation（js钩子实现css3动画） + css3 animation和transition
 ```
