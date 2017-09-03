@@ -24,7 +24,9 @@
       <div class="bottom">
         <div class="progress-wrapper">
           <span class="time time-l">{{format(currentTime)}}</span>
-          <div class="progress-bar-wrapper"></div>
+          <div class="progress-bar-wrapper">
+            <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
+          </div>
           <span class="time time-r">{{format(currentSong.duration)}}</span>
         </div>
         <div class="operators">
@@ -86,9 +88,13 @@ import animations from 'create-keyframe-animation'
 import {
   prefixStyle
 } from 'common/js/dom'
-
+import ProgressBar from 'base/progress-bar/progress-bar'
 const transform = prefixStyle("transform")
 export default {
+
+  components: {
+    ProgressBar
+  },
   data() {
     return {
       songReady: false,
@@ -98,6 +104,15 @@ export default {
   },
 
   methods: {
+    onProgressBarChange(percent) {
+      const currentTime = percent *this.currentSong.duration
+      this.$refs.audio.currentTime = currentTime
+      if(!this.playing){
+        //使暂停拉动之后默认开启播放模式
+        this.togglePlaying()
+      }
+    },
+
     format(interval) {
       interval = interval | 0
       let minute = interval / 60 | 0
@@ -107,7 +122,6 @@ export default {
     updateTime(e) {
       this.currentTime = e.target.currentTime
     },
-
     error() {
       //如果歌曲出现错误，直接赋值以免影响之后操作
       this.songReady = true
@@ -117,7 +131,6 @@ export default {
       //避免快速点击触发dom异常
       this.songReady = true
     },
-
     next() {
       if (!this.songReady) {
         return
@@ -147,7 +160,6 @@ export default {
       this.songReady = false
 
     },
-
     back() {
       this.setFullScreen(false)
     },
@@ -160,8 +172,6 @@ export default {
       }
       this.setPlayingState(!this.playing)
     },
-
-
     enter(el, done) {
       //从mini进入播放全屏的放大+移动效果动画
       const {
@@ -256,6 +266,9 @@ export default {
 
   },
   computed: {
+    percent() {
+      return this.currentTime / this.currentSong.duration
+    },
     disableCls() {
       return this.songReady ? '' : 'disable'
     },

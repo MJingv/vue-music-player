@@ -111,9 +111,6 @@ export default {
       }
       this.$refs.filter.style[backdrop] = `blur(${blur}px)`
 
-      console.log(this.$refs.filter.style[backdrop] + 'blur effect ')
-
-
       if (newY < this.minTranslateY) {
         //滚到了title处
         zIndex = 10
