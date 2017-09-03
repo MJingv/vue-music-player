@@ -35,5 +35,7 @@ music-list  ---  封装css3各浏览器等prefixStyle
 
 playt  ---  有全屏播放器和mini播放器
             增加各种炫酷动画交互效果：大小屏飞入弹出、切换渐变移动等
-            vue-transtion动画钩子 + create-keyframe-animation（js钩子实现css3动画） + css3 animation和transition
+            vue-transtion动画钩子
+            create-keyframe-animation（js钩子实现css3动画）
+            css3 animation和transition
 ```
