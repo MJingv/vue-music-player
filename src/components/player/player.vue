@@ -95,8 +95,13 @@ import ProgressBar from 'base/progress-bar/progress-bar'
 import {
   playMode
 } from 'common/js/config'
+import {
+  shuffle
+} from 'common/js/util'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 const transform = prefixStyle("transform")
+
+
 export default {
   components: {
     ProgressBar,
@@ -115,8 +120,22 @@ export default {
     changeMode() {
       const mode = (this.mode + 1) % 3
       this.setPlayMode(mode)
+      let list = null
+      if (mode === playMode.random) {
+        list=shuffle(this.sequenceList)
+      } else {
+        list = this.sequenceList
+      }
+      this.resetCurrentIndex(list)
+      this.setPlaylist(list)
     },
-
+    resetCurrentIndex(list) {
+      //保证切换播放模式不变当前播放的歌曲
+      let index = list.findIndex((item) => {
+        return item.id === this.currentSong.id
+      })
+      this.setCurrentIndex = index
+    },
     onProgressBarChange(percent) {
       const currentTime = percent * this.currentSong.duration
       this.$refs.audio.currentTime = currentTime
@@ -125,7 +144,6 @@ export default {
         this.togglePlaying()
       }
     },
-
     format(interval) {
       interval = interval | 0
       let minute = interval / 60 | 0
@@ -153,6 +171,7 @@ export default {
         index = 0
       }
       this.setCurrentIndex(index)
+
       if (!this.playing) {
         this.togglePlaying()
       }
@@ -257,11 +276,15 @@ export default {
       setPlayingState: 'SET_PLAYING_STATE',
       setCurrentIndex: 'SET_CURRENT_INDEX',
       setPlayMode: 'SET_PLAY_MODE',
+      setPlaylist: 'SET_PLAYLIST'
     })
 
   },
   watch: {
-    currentSong() {
+    currentSong(newSong, oldSong) {
+      if (oldSong.id === newSong.id) {
+        return
+      }
       this.$nextTick(() => {
         //dom完成后的回调
         this.$refs.audio.play()
@@ -306,6 +329,7 @@ export default {
       'playing',
       'currentIndex',
       'mode',
+      'sequenceList',
 
     ])
   }
