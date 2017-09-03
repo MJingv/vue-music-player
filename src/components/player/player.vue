@@ -30,8 +30,8 @@
           <span class="time time-r">{{format(currentSong.duration)}}</span>
         </div>
         <div class="operators">
-          <div class="icon i-left">
-            <i class="icon-sequence"></i>
+          <div class="icon i-left" @click="changeMode">
+            <i :class="iconMode"></i>
           </div>
           <div class="icon i-left" :class="disableCls">
             <i class="icon-prev" @click="prev"></i>
@@ -92,11 +92,12 @@ import {
   prefixStyle
 } from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
-
+import {
+  playMode
+} from 'common/js/config'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 const transform = prefixStyle("transform")
 export default {
-
   components: {
     ProgressBar,
     ProgressCircle
@@ -105,12 +106,17 @@ export default {
     return {
       songReady: false,
       currentTime: 0,
-      radius:32,
+      radius: 32,
 
     }
   },
 
   methods: {
+    changeMode() {
+      const mode = (this.mode + 1) % 3
+      this.setPlayMode(mode)
+    },
+
     onProgressBarChange(percent) {
       const currentTime = percent * this.currentSong.duration
       this.$refs.audio.currentTime = currentTime
@@ -249,9 +255,9 @@ export default {
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
       setPlayingState: 'SET_PLAYING_STATE',
-      setCurrentIndex: 'SET_CURRENT_INDEX'
+      setCurrentIndex: 'SET_CURRENT_INDEX',
+      setPlayMode: 'SET_PLAY_MODE',
     })
-
 
   },
   watch: {
@@ -270,9 +276,11 @@ export default {
       })
 
     }
-
   },
   computed: {
+    iconMode() {
+      return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
+    },
     percent() {
       return this.currentTime / this.currentSong.duration
     },
@@ -297,6 +305,7 @@ export default {
       'currentSong',
       'playing',
       'currentIndex',
+      'mode',
 
     ])
   }
