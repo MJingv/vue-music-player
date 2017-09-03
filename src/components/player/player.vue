@@ -64,7 +64,10 @@
 
       </div>
       <div class="control">
-        <i :class="miniIcon " @click.stop="togglePlaying"></i>
+        <progress-circle :radius="radius" :percent="percent">
+          <i :class="miniIcon" @click.stop="togglePlaying" class="icon-mini"></i>
+        </progress-circle>
+
       </div>
       <div class="control">
         <i class="icon-playlist"></i>
@@ -89,25 +92,29 @@ import {
   prefixStyle
 } from 'common/js/dom'
 import ProgressBar from 'base/progress-bar/progress-bar'
+
+import ProgressCircle from 'base/progress-circle/progress-circle'
 const transform = prefixStyle("transform")
 export default {
 
   components: {
-    ProgressBar
+    ProgressBar,
+    ProgressCircle
   },
   data() {
     return {
       songReady: false,
       currentTime: 0,
+      radius:32,
 
     }
   },
 
   methods: {
     onProgressBarChange(percent) {
-      const currentTime = percent *this.currentSong.duration
+      const currentTime = percent * this.currentSong.duration
       this.$refs.audio.currentTime = currentTime
-      if(!this.playing){
+      if (!this.playing) {
         //使暂停拉动之后默认开启播放模式
         this.togglePlaying()
       }
