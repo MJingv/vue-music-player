@@ -8,7 +8,7 @@
 
   <div class="bg-image" :style="bgStyle" ref='bgImage'>
     <div class="play-wrapper">
-      <div class="play" v-show="songs.length>0" ref ="playBtn">
+      <div class="play" v-show="songs.length>0" ref="playBtn">
         <i class="icon-play"></i>
         <span class="text">随机播放全部</span>
       </div>
@@ -19,9 +19,9 @@
   <div class="bg-layer" ref="layer"> </div>
   <scroll @scroll="scroll" :data="songs" class="list" ref='list' :probe-type="probeType" :listenScroll="listenScroll">
     <div class="song-list-wrapper">
-      <song-list :songs="songs"></song-list>
+      <song-list :songs="songs" @select="selectItem"></song-list>
     </div>
-    <div class="loading-container" v-show ="!songs.length">
+    <div class="loading-container" v-show="!songs.length">
       <loading></loading>
     </div>
   </scroll>
@@ -37,12 +37,12 @@ import Loading from 'base/loading/loading'
 import {
   prefixStyle
 } from 'common/js/dom'
-
+import {
+  mapActions
+} from 'vuex'
 const RESERVED_HEIGHT = 40
 const transform = prefixStyle('transform')
 const backdrop = prefixStyle('backdrop-filter')
-
-
 
 export default {
   props: {
@@ -70,13 +70,23 @@ export default {
     }
   },
   methods: {
+    selectItem(item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      })
+
+    },
     scroll(pos) {
       //实时拿到y的值
       this.scrollY = pos.y
     },
     back() {
       this.$router.back()
-    }
+    },
+    ...mapActions([
+      'selectPlay'
+    ])
   },
   watch: {
     scrollY(newY) {
@@ -108,12 +118,12 @@ export default {
         zIndex = 10
         this.$refs.bgImage.style.paddingTop = 0
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
-        this.$refs.playBtn.style.display='none'
+        this.$refs.playBtn.style.display = 'none'
       } else {
         this.$refs.bgImage.style.paddingTop = '70%'
         this.$refs.bgImage.style.height = 0
 
-        this.$refs.playBtn.style.display=''
+        this.$refs.playBtn.style.display = ''
       }
       this.$refs.bgImage.style.zIndex = zIndex
       this.$refs.bgImage.style[transform] = `scale(${scale})`
