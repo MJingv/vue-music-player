@@ -40,6 +40,7 @@ import {
 import {
   mapActions
 } from 'vuex'
+
 const RESERVED_HEIGHT = 40
 const transform = prefixStyle('transform')
 const backdrop = prefixStyle('backdrop-filter')
