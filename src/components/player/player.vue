@@ -13,7 +13,7 @@
         <h2 class="subtitle" v-html="currentSong.singer"></h2>
       </div>
       <div class="middle" @touchstart.prevent="middleTouchStart" @touchmove.prevent="middleTouchMove" @touchend="middleTouchEnd">
-        <div class="middle-l">
+        <div class="middle-l" ref='middleL'>
           <div class="cd-wrapper" ref="cdWrapper">
             <div class="cd" :class="cdCls">
               <img class="image" :src="currentSong.image">
@@ -111,7 +111,10 @@ import {
 } from 'common/js/util'
 import Scroll from 'base/scroll/scroll'
 import ProgressCircle from 'base/progress-circle/progress-circle'
+
+
 const transform = prefixStyle("transform")
+const transitionDuration = prefixStyle("transitionDuration")
 
 export default {
   components: {
@@ -155,30 +158,44 @@ export default {
       //math.min=》只能向右滑动 && math.max=>滑动不超过屏幕大小
       const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + deltaX))
       this.touch.percent = Math.abs(offsetWidth / window.innerWidth)
-      this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+      this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth},0,0)`
+      this.$refs.lyricList.$el.style[transitionDuration] = 0
+      this.$refs.middleL.style.opacity = 1 - this.touch.percent
+      this.$refs.middleL.style[transitionDuration] = 0
     },
     middleTouchEnd() {
       let offsetWidth
+      let opacity
       if (this.currentShow === 'cd') {
         //r->l
         if (this.touch.percent > 0.1) {
           //如果向左滑动超过10%则
           offsetWidth = -window.innerWidth
+          opacity = 0
           this.currentShow = 'lyric'
         } else {
           offsetWidth = 0
         }
-      } else if (this.currentShow === 'lyric') {
+      } else {
         //l->r
         if (this.touch.percent < 0.9) {
           //如果向右滑动超过10%则
           offsetWidth = 0
           this.currentShow = 'cd'
+          opacity = 1
         } else {
-          offsetWidth = window.innerWidth
+          offsetWidth = -window.innerWidth
         }
       }
+      const time = 300
+      console.log(this.touch.percent);
+      this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`
       this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+
+      this.$refs.middleL.style.opacity = opacity
+      this.$refs.middleL.style[transitionDuration] = `${time}ms`
+
+      this.touch.initiated = false
     },
     getLyric() {
       this.currentSong.getLyric().then((lyric) => {
