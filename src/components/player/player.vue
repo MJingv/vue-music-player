@@ -297,6 +297,7 @@ export default {
       this.$nextTick(() => {
         //dom完成后的回调
         this.$refs.audio.play()
+        this.currentSong.getLyric()
       })
 
     },
