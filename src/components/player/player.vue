@@ -19,6 +19,12 @@
               <img class="image" :src="currentSong.image">
             </div>
           </div>
+          <div class="playing-lyric-wrapper">
+            <div class="playing-lyric">
+              {{playingLyric}}
+            </div>
+
+          </div>
         </div>
         <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
           <div class="lyric-wrapper">
@@ -124,13 +130,14 @@ export default {
   },
   data() {
     return {
+      //与dom有映射 可得到getter、setter
+      playingLyric: '',
       currentLineNum: 0,
       currentLyric: null,
       songReady: false,
       currentTime: 0,
       radius: 32,
       currentShow: 'cd',
-
     }
   },
   created() {
@@ -203,8 +210,12 @@ export default {
         if (this.playing) {
           this.currentLyric.play()
         }
+      }).catch(() => {
+        //如果获取歌词失败
+        this.currentLyric = null
+        this.playingLyric = ''
+        this.currentLineNum = 0
       })
-
     },
     handleLyric({
       lineNum,
@@ -219,12 +230,16 @@ export default {
       } else {
         this.$refs.lyricList.scrollTo(0, 0, 1000)
       }
+      this.playingLyric = txt //当前歌词的展示
     },
     end() {
       if (this.mode === playMode.loop) {
         //直接修改当前时间为0再播放实现单曲循环
         this.$refs.audio.currentTime = 0
         this.$refs.audio.play()
+        if (this.currentLyric) {
+          this.currentLyric.seek(0)
+        }
       } else {
         this.next()
       }
@@ -257,6 +272,9 @@ export default {
         //使暂停拉动之后默认开启播放模式
         this.togglePlaying()
       }
+      if (this.currentLyric) {
+        this.currentLyric.seek(currentTime * 1000)
+      }
     },
     format(interval) {
       interval = interval | 0
@@ -280,20 +298,43 @@ export default {
       if (!this.songReady) {
         return
       }
-      let index = this.currentIndex + 1
-      if (index === this.playlist.length) {
-        index = 0
-      }
-      this.setCurrentIndex(index)
+      if (this.playlist.length === 1) {
+        this.loop()
+      } else {
+        let index = this.currentIndex + 1
+        if (index === this.playlist.length) {
+          index = 0
+        }
+        this.setCurrentIndex(index)
 
-      if (!this.playing) {
-        this.togglePlaying()
+        if (!this.playing) {
+          this.togglePlaying()
+        }
+        this.songReady = false
+
       }
-      this.songReady = false
+
     },
     prev() {
       if (!this.songReady) {
         return
+      }
+      if (this.playlist.length === 1) {
+        this.loop()
+
+      } else {
+        let index = this.currentIndex + 1
+        if (index === this.playlist.length) {
+          index = 0
+        }
+        this.setCurrentIndex(index)
+
+        if (!this.playing) {
+          this.togglePlaying()
+        }
+        this.songReady = false
+
+
       }
       let index = this.currentIndex - 1
       if (index === -1) {
@@ -317,6 +358,9 @@ export default {
         return
       }
       this.setPlayingState(!this.playing)
+      if (this.currentLyric) {
+        this.currentLyric.togglePlay()
+      }
     },
     enter(el, done) {
       //从mini进入播放全屏的放大+移动效果动画
@@ -399,11 +443,23 @@ export default {
       if (oldSong.id === newSong.id) {
         return
       }
-      this.$nextTick(() => {
+      if (this.currentLyric) {
+        //切换歌曲时清除定时器
+        this.currentLyric.stop()
+      }
+      // this.$nextTick(() => {
+      //   //dom完成后的回调
+      //   this.$refs.audio.play()
+      //   this.getLyric()
+      // })
+
+      //微信后台调用bug修复
+      setTimeout(() => {
         //dom完成后的回调
         this.$refs.audio.play()
         this.getLyric()
-      })
+      },1000)
+
 
     },
 
