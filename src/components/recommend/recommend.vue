@@ -2,7 +2,6 @@
 <div class="recommend" ref="recommend">
   <scroll class="recommend-content" ref="scroll" :data="discList">
     <div>
-
       <div v-if="recommends.length" class=" slider-wrapper" ref="sliderWrapper">
         <slider>
           <div v-for="item in recommends">
@@ -29,8 +28,8 @@
         </ul>
       </div>
     </div>
-    <div class="loading-container" v-show = "!discList.length">
-<Loading></Loading>
+    <div class="loading-container" v-show="!discList.length">
+      <Loading></Loading>
     </div>
   </scroll>
 </div>
@@ -48,7 +47,9 @@ import {
 import Slider from 'base/slider/slider'
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
+import {playlistMixin} from 'common/js/mixin'
 export default {
+  mixins:[playlistMixin],
   data() {
     return {
       recommends: [],
@@ -63,6 +64,11 @@ export default {
   },
 
   methods: {
+    handlePlaylist(playlist) {
+      let bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
+    },
     _getRecommend() {
       getRecommend().then((res) => {
         if (res.code === ERR_OK) {
@@ -79,12 +85,12 @@ export default {
 
       })
     },
-    loadImage(){
-//知道一张图片就可以
+    loadImage() {
+      //知道一张图片就可以
 
-      if(!this.checkLoaded  ){
-          this.$refs.scroll.refresh()
-          this.checkLoaded = true
+      if (!this.checkLoaded) {
+        this.$refs.scroll.refresh()
+        this.checkLoaded = true
       }
     }
   },

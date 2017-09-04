@@ -24,12 +24,13 @@
       <loading></loading>
     </div>
   </scroll>
-
-
 </div>
 </template>
 
 <script>
+import {
+  playlistMixin
+} from 'common/js/mixin'
 import Scroll from 'base/scroll/scroll'
 import SongList from 'base/song-list/song-list'
 import Loading from 'base/loading/loading'
@@ -45,6 +46,7 @@ const transform = prefixStyle('transform')
 const backdrop = prefixStyle('backdrop-filter')
 
 export default {
+  mixins: [playlistMixin],
   props: {
     bgImage: {
       type: String,
@@ -70,6 +72,12 @@ export default {
     }
   },
   methods: {
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      //list是vue组件scroll用$el
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
     random() {
       this.randomPlay({
         list: this.songs
