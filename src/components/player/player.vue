@@ -150,15 +150,36 @@ export default {
         //如果上下滑动
         return
       }
-      const width = e.pageX + deltaX
       const left = this.currentShow === 'cd' ? 0 : -window.innerWidth
-      const offsetWidth = left + deltaX
-      console.log(offsetWidth);
-
+      console.log('移动' + offsetWidth);
+      //math.min=》只能向右滑动 && math.max=>滑动不超过屏幕大小
+      const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + deltaX))
+      this.touch.percent = Math.abs(offsetWidth / window.innerWidth)
       this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
-
     },
-    middleTouchEnd() {},
+    middleTouchEnd() {
+      let offsetWidth
+      if (this.currentShow === 'cd') {
+        //r->l
+        if (this.touch.percent > 0.1) {
+          //如果向左滑动超过10%则
+          offsetWidth = -window.innerWidth
+          this.currentShow = 'lyric'
+        } else {
+          offsetWidth = 0
+        }
+      } else if (this.currentShow === 'lyric') {
+        //l->r
+        if (this.touch.percent < 0.9) {
+          //如果向右滑动超过10%则
+          offsetWidth = 0
+          this.currentShow = 'cd'
+        } else {
+          offsetWidth = window.innerWidth
+        }
+      }
+      this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+    },
     getLyric() {
       this.currentSong.getLyric().then((lyric) => {
         this.currentLyric = new Lyric(lyric, this.handleLyric)
