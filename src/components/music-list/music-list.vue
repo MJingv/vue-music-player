@@ -5,10 +5,9 @@
   </div>
   <h1 class="title" v-html="title"></h1>
   <!-- title会有转义字符，推荐html -->
-
   <div class="bg-image" :style="bgStyle" ref='bgImage'>
     <div class="play-wrapper">
-      <div class="play" v-show="songs.length>0" ref="playBtn">
+      <div class="play" v-show="songs.length>0" ref="playBtn" @click="random">
         <i class="icon-play"></i>
         <span class="text">随机播放全部</span>
       </div>
@@ -71,6 +70,11 @@ export default {
     }
   },
   methods: {
+    random() {
+      this.randomPlay({
+        list: this.songs
+      })
+    },
     selectItem(item, index) {
       this.selectPlay({
         list: this.songs,
@@ -86,7 +90,8 @@ export default {
       this.$router.back()
     },
     ...mapActions([
-      'selectPlay'
+      'selectPlay',
+      'randomPlay'
     ])
   },
   watch: {
