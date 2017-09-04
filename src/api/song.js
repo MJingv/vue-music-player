@@ -1,6 +1,8 @@
 import {commonParams} from './config'
 import axios from 'axios'
 
+
+
 export function getLyric(mid) {
   const url = "/api/lyric"
 
@@ -13,9 +15,7 @@ export function getLyric(mid) {
     format: 'json',
     needNewCode: 0
   })
-  return axios.get(url, {
-    params: data
-  }).then((res) => {
+  return axios.get(url, {params: data}).then((res) => {
     return Promise.resolve(res.data)
   })
 }

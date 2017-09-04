@@ -85,6 +85,7 @@ import {
   mapGetters,
   mapMutations
 } from 'vuex'
+import Lyric from 'lyric-parser'
 import animations from 'create-keyframe-animation'
 import {
   prefixStyle
@@ -96,9 +97,9 @@ import {
 import {
   shuffle
 } from 'common/js/util'
+
 import ProgressCircle from 'base/progress-circle/progress-circle'
 const transform = prefixStyle("transform")
-
 
 export default {
   components: {
@@ -107,6 +108,7 @@ export default {
   },
   data() {
     return {
+      currentLyric:null,
       songReady: false,
       currentTime: 0,
       radius: 32,
@@ -115,6 +117,13 @@ export default {
   },
 
   methods: {
+    getLyric() {
+      this.currentSong.getLyric().then((lyric) => {
+        this.currentLyric = new Lyric(lyric)
+        console.log(this.currentLyric);
+      })
+
+    },
     end() {
       if (this.mode === playMode.loop) {
         //直接修改当前时间为0再播放实现单曲循环
@@ -297,7 +306,7 @@ export default {
       this.$nextTick(() => {
         //dom完成后的回调
         this.$refs.audio.play()
-        this.currentSong.getLyric()
+        this.getLyric()
       })
 
     },
