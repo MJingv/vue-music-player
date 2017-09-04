@@ -22,10 +22,16 @@ npm run build --report
 
 > 各种插件
 
+v-lazy  ---  vue图片懒加载
+v-router  ---  vue路由
+vuex  ---  vue数据管理
+
+
 axios  ---  抓取数据
 better-scroll  ---  优化移动端滚动事件
-v-lazy  ---  vue图片懒加载
 create-keyframe-animation  ---  利用js钩子实现动画，用js实现css3的效果
+js-base64  ---  解析base64歌词编码
+lyric-parser  ---  将歌词数据转换成被解析的类
 ```
 
 
@@ -41,5 +47,9 @@ player ---  有全屏播放器和mini播放器
             create-keyframe-animation（js钩子实现css3动画）
             css3 animation和transition
             
+            歌词部分：解析歌词为正确格式并使歌词跟随音乐播放实时滚动
+            
+            
+           
             修复连续切换出现无法显示的bug（url没有ready）
 ```
