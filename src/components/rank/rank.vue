@@ -2,31 +2,31 @@
 <div class="rank" ref="rank">
   <scroll class="toplist" ref="toplist">
     <ul>
-      <li class="item" v-for = "item in topList">
-        <div class="icon" >
-          <img width="100" height="100" v-lazy="item.picUrl"/>
+      <li class="item" v-for="item in topList" @click="selectItem(item)">
+        <div class="icon">
+          <img width="100" height="100" v-lazy="item.picUrl" />
         </div>
         <ul class="songlist">
-          <li class="song" v-for ="(song,index) in item.songList">
+          <li class="song" v-for="(song,index) in item.songList">
             <span>{{`${index+1} ${song.songname} - ${song.singername}`}}</span>
             <span></span>
           </li>
         </ul>
       </li>
     </ul>
-    <div class="loading-container" v-if ="!topList.length">
+    <div class="loading-container" v-if="!topList.length">
       <loading></loading>
     </div>
   </scroll>
-
   <router-view></router-view>
 </div>
 </template>
 <script>
 import Scroll from 'base/scroll/scroll'
 import Loading from 'base/loading/loading'
-import {playlistMixin}  from 'common/js/mixin'
-
+import {
+  playlistMixin
+} from 'common/js/mixin'
 import {
   ERR_OK
 } from 'api/config'
@@ -37,11 +37,12 @@ import {
 import {
   getTopList
 } from 'api/rank'
+
 export default {
-  mixins:[playlistMixin],
+  mixins: [playlistMixin],
   components: {
     Scroll,
-    Loading
+    Loading,
   },
   data() {
     return {
@@ -52,24 +53,31 @@ export default {
     this._getTopList()
   },
   methods: {
+    selectItem(item) {
+      this.$router.push({
+        path: `/rank/${item.id}`,
+      })
+      this.setTopList(item)
+    },
     _getTopList() {
-
       getTopList().then((res) => {
         console.log(res.code);
         if (res.code === ERR_OK) {
           this.topList = res.data.topList
           console.log(res.data.topList);
         }
-
       })
 
     },
-    handlePlaylist(playlist){
-      const bottom = playlist.length?'60px':''
+    handlePlaylist(playlist) {
+      const bottom = playlist.length ? '60px' : ''
       this.$refs.rank.style.bottom = bottom
       //dom组件变化了，手动调用刷新scroll组件
       this.$refs.toplist.refresh()
-    }
+    },
+    ...mapMutations({
+      setTopList:'SET_TOP_LIST'
+    })
   }
 
 }

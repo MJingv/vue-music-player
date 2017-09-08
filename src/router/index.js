@@ -7,46 +7,48 @@ import Singer from 'components/singer/singer'
 import Search from 'components/search/search'
 import SingerDetail from 'components/singer-detail/singer-detail'
 import Disc from 'components/disc/disc'
-Vue.use(Router)
+import TopList from 'components/top-list/top-list'
 
+Vue.use(Router)
 export default new Router({
   routes: [
     {
       path: '/',
-      redirect:'/recommend'
-    },
-    {
+      redirect: '/recommend'
+    }, {
       path: '/recommend',
       name: 'Recommend',
       component: Recommend,
-      children:[
+      children: [
         {
           path: ':id',
           component: Disc
         }
       ]
-    },
-    {
+    }, {
       path: '/rank',
       name: 'Rank',
-      component: Rank
-    },
-    {
+      component: Rank,
+      children: [
+        {
+          path: ':id',
+          component: TopList
+        }
+      ]
+    }, {
       path: '/singer',
       name: 'Singer',
       component: Singer,
-      children:[
+      children: [
         {
           path: ':id',
           component: SingerDetail
         }
       ]
-    },
-    {
+    }, {
       path: '/search',
       name: 'Search',
       component: Search
-    },
-
+    }
   ]
 })
