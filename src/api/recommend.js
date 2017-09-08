@@ -45,7 +45,6 @@ export function getSongList(disstid) {
     hostUin: 0,
     nosign:1,
     new_format:1,
-
   })
 
   return jsonp(url, data, options1)
