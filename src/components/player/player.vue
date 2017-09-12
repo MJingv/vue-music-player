@@ -250,7 +250,9 @@ export default {
       this.setPlayMode(mode)
       let list = null
       if (mode === playMode.random) {
+        console.log(list+'old');
         list = shuffle(this.sequenceList)
+      console.log(list+'new');
       } else {
         list = this.sequenceList
       }

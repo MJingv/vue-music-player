@@ -61,10 +61,10 @@ export default {
     },
     _getTopList() {
       getTopList().then((res) => {
-        console.log(res.code);
+
         if (res.code === ERR_OK) {
           this.topList = res.data.topList
-          console.log(res.data.topList);
+
         }
       })
 
@@ -76,7 +76,7 @@ export default {
       this.$refs.toplist.refresh()
     },
     ...mapMutations({
-      setTopList:'SET_TOP_LIST'
+      setTopList: 'SET_TOP_LIST'
     })
   }
 

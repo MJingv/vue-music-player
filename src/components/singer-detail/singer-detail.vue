@@ -38,8 +38,6 @@ export default {
   },
   created() {
     this._getDetail()
-
-
   },
   methods: {
     _getDetail() {
