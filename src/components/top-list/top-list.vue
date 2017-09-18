@@ -6,7 +6,9 @@
 
 <script>
 import MusicList from 'components/music-list/music-list'
-import {ERR_OK} from 'api/config'
+import {
+  ERR_OK
+} from 'api/config'
 import {
   mapGetters
 } from 'vuex'
@@ -19,9 +21,14 @@ import {
 
 export default {
   computed: {
-
     bgImage() {
-      return this.topList.picUrl
+      if (this.songs.length) {
+        //让列表先渲染完毕再判断！！！！
+        return this.songs[0].image
+      } else {
+        return ''
+      }
+
     },
     title() {
       return this.topList.topTitle
@@ -42,20 +49,29 @@ export default {
 
   methods: {
     _getMusicList() {
+      if (!this.topList.id) {
+        this.$router.push('/rank')
+        return
+      }
       getMusicList(this.topList.id).then((res) => {
-        console.log('dkljfl');
-        console.log(res.code);
         if (res.code == ERR_OK) {
-          console.log(res + 'jehol');
-          // this.songs = this._normalizeSongs(res.data.list)
+          console.log(res.songlist);
+          this.songs = this._normalizeSongs(res.songlist)
 
         }
       })
 
     },
-
-
-
+    _normalizeSongs(list) {
+      let ret = []
+      list.map((item) => {
+        const musicData = item.data
+        if (musicData.songid && musicData.albumid) {
+          ret.push(createSong(musicData))
+        }
+      })
+      return ret
+    }
 
   },
 
