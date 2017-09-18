@@ -1,6 +1,6 @@
 <template>
 <transition name="slide">
-  <music-list :bgImage="bgImage" :title="title" :songs="songs"></music-list>
+  <music-list :bgImage="bgImage" :title="title" :songs="songs" rank="rank" ></music-list>
 </transition>
 </template>
 
@@ -40,7 +40,8 @@ export default {
   },
   data() {
     return {
-      songs: []
+      songs: [],
+      rank:true,
     }
   },
   created() {
