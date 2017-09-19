@@ -6,7 +6,6 @@
 </div>
 </template>
 
-
 <script>
 export default {
   props: {
@@ -14,7 +13,6 @@ export default {
       type: String,
       default: '搜索歌曲、歌手'
     },
-
   },
 
   data() {
@@ -23,10 +21,14 @@ export default {
 
     }
   },
+
   methods: {
     clear() {
       this.query = ''
-    }
+    },
+    setQuery(query) {
+      this.query = query
+    },
 
   },
 
