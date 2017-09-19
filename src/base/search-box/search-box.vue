@@ -7,6 +7,10 @@
 </template>
 
 <script>
+import {
+  ERR_OK
+} from 'api/config'
+
 export default {
   props: {
     placeholder: {
@@ -29,7 +33,6 @@ export default {
     setQuery(query) {
       this.query = query
     },
-
   },
 
   created() {
