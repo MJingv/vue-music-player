@@ -6,7 +6,7 @@
         <i :class="getIconCls(item)"></i>
       </div>
       <div class="name">
-        <p class="text"></p>
+        <p class="text" v-html="getDisplayName(item)"></p>
       </div>
     </li>
   </ul>
@@ -18,7 +18,7 @@
 import {
   ERR_OK
 } from 'api/config'
-
+import {filterSinger} from 'common/js/song'
 import {
   search
 } from 'api/search'
@@ -26,6 +26,7 @@ const TYPE_SINGER = 'singer'
 export default {
   props: {
     query: {
+      //检索词
       type: String,
       default: ''
     },
@@ -34,14 +35,26 @@ export default {
       default: true
     },
   },
+  watch:{
+    query(){
+      this.search()
+    }
+  },
   data() {
     return {
       page: 1,
       result: []
 
     }
-  }
+  },
   methods: {
+getDisplayName(item){
+  if(item.type==TYPE_SINGER){
+    return item.singername
+  }else {
+    return  `${item.songname}-${filterSinger(item.singer)}`
+  }
+},
     getIconCls(item){
       if(item.type === TYPE_SINGER){
         //歌手icon
@@ -54,10 +67,10 @@ export default {
     search() {
       search(this.query, this.page, this.showSinger).then((res) => {
         if (res.code == ERR_OK) {
+          console.log(res.data);
           this.result = this._getResult(res.data)
         }
       })
-
 
     },
     _getResult(data) {
@@ -76,7 +89,7 @@ export default {
       return ret
     }
 
-  }
+  },
   watch: {
     query() {
       //当query值改变时调用seach重新请求数据
