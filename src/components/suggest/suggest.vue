@@ -10,7 +10,6 @@
       </div>
     </li>
   </ul>
-
 </div>
 </template>
 
@@ -18,7 +17,9 @@
 import {
   ERR_OK
 } from 'api/config'
-import {filterSinger} from 'common/js/song'
+import {
+  filterSinger,createSong
+} from 'common/js/song'
 import {
   search
 } from 'api/search'
@@ -35,8 +36,8 @@ export default {
       default: true
     },
   },
-  watch:{
-    query(){
+  watch: {
+    query() {
       this.search()
     }
   },
@@ -48,18 +49,18 @@ export default {
     }
   },
   methods: {
-getDisplayName(item){
-  if(item.type==TYPE_SINGER){
-    return item.singername
-  }else {
-    return  `${item.songname}-${filterSinger(item.singer)}`
-  }
-},
-    getIconCls(item){
-      if(item.type === TYPE_SINGER){
+    getDisplayName(item) {
+      if (item.type == TYPE_SINGER) {
+        return item.singername
+      } else {
+        return `${item.name}-${item.singer}`
+      }
+    },
+    getIconCls(item) {
+      if (item.type === TYPE_SINGER) {
         //歌手icon
         return 'icon-mine'
-      }else{
+      } else {
         //歌曲icon
         return 'icon-music'
       }
@@ -84,12 +85,21 @@ getDisplayName(item){
         })
       }
       if (data.song) {
-        ret = ret.concat(data.song.list)
+        ret = ret.concat(this._normalizeSongs(data.song.list))
       }
       return ret
-    }
-
+    },
+    _normalizeSongs(list){
+      let ret=[]
+      list.forEach((musicData)=>{
+        if(musicData.songid && musicData.albumid){
+          ret.push(createSong(musicData))
+        }
+      })
+      return ret
+    },
   },
+
   watch: {
     query() {
       //当query值改变时调用seach重新请求数据
