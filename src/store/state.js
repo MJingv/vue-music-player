@@ -9,7 +9,6 @@ const state = {
   currentIndex:-1,
   disc:{},
   topList:{}
-
 }
 
 export default state

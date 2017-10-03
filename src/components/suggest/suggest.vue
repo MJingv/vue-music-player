@@ -1,7 +1,7 @@
 <template>
-<scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" ref ="suggest" >
+<scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" ref="suggest">
   <ul class="suggest-list">
-    <li @click= 'selectItem(item)' class="suggest-item" v-for="item in result">
+    <li @click='selectItem(item)' class="suggest-item" v-for="item in result">
       <div class="icon">
         <i :class="getIconCls(item)"></i>
       </div>
@@ -9,11 +9,10 @@
         <p class="text" v-html="getDisplayName(item)"></p>
       </div>
     </li>
-    <loading v-show="hasMore" ></loading>
+    <loading v-show="hasMore"></loading>
   </ul>
   <router-view></router-view>
 </scroll>
-
 </template>
 
 <script>
@@ -29,9 +28,11 @@ import {
 } from 'api/search'
 import Loading from 'base/loading/loading'
 import Singer from 'common/js/singer'
-import {mapMutations} from 'vuex'
+import {
+  mapMutations,mapActions
+} from 'vuex'
 
-const TYPE_SINGER = 2
+const TYPE_SINGER = 'singer'
 const perpage = 20
 
 export default {
@@ -64,17 +65,20 @@ export default {
     }
   },
   methods: {
-    selectItem(item){
-      if(item.type === TYPE_SINGER){
-        const singer  = new Singer({
-          id:item.singermid,
-          name:item.singername
+    selectItem(item) {
+      if (item.type === TYPE_SINGER) {
+        const singer = new Singer({
+          id: item.singermid,
+          name: item.singername
         })
         this.$router.push({
-          path:`/search/${singer.id}`
+          path: `/search/${singer.id}`
         })
         //修改当前singer
         this.setSinger(singer)
+      }else{
+        //调用action，insert一首歌
+        this.insertSong(item)
       }
     },
     searchMore() {
@@ -109,14 +113,14 @@ export default {
       }
     },
     search() {
-      this.page=1
+      this.page = 1
       this.hasMore = true
-      this.$refs.suggest.scrollTo(0,0)
+      this.$refs.suggest.scrollTo(0, 0)
       search(this.query, this.page, this.showSinger, perpage).then((res) => {
         if (res.code == ERR_OK) {
           this.result = this._getResult(res.data)
           this._checkMore(res.data)
-        
+
         }
       })
     },
@@ -130,20 +134,20 @@ export default {
     },
     _getResult(data) {
       let ret = []
-
-      if (data.zhida && data.zhida.singerId) {
+      if (data.zhida && data.zhida.singerid) {
         ret.push({
           ...data.zhida,
-          // ...{
-          //   type: TYPE_SINGER
-          // }
+          ...{
+            type: TYPE_SINGER
+          }
         })
-
       }
       if (data.song) {
         ret = ret.concat(this._normalizeSongs(data.song.list))
       }
+      // console.log(ret);
       return ret
+
     },
     _normalizeSongs(list) {
       let ret = []
@@ -155,8 +159,13 @@ export default {
       return ret
     },
     ...mapMutations({
-      setSinger:'SET_SINGER'
-    })
+      setSinger: 'SET_SINGER'
+    }),
+    ...mapActions([
+      'insertSong'
+    ]
+
+    )
   },
   watch: {
     query() {
