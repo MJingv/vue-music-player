@@ -32,6 +32,7 @@ better-scroll  ---  优化移动端滚动事件
 create-keyframe-animation  ---  利用js钩子实现动画，用js实现css3的效果
 js-base64  ---  解析base64歌词编码
 lyric-parser  ---  将歌词数据转换成被解析的类
+good-storage  ---  封装localStorage
 ```
 
 
@@ -42,7 +43,9 @@ lyric-parser  ---  将歌词数据转换成被解析的类
 
 业务组件
 music-list  ---  封装css3各浏览器等prefixStyle 
-                 优化歌手歌曲列表的bg-img的scale放大缩小、blur动态高斯模糊、动态旋转隐藏信息等交互操作
+                 优化歌手歌曲列表的bg-img的scale放大缩小、blur动态高斯模糊、动态旋转隐藏信息等交互操作
+
+                 
   
   
 页面实现：
@@ -64,6 +67,16 @@ player-page ---  有全屏播放器和mini播放器
             修复连续切换出现无法显示的bug（url没有ready）
         
 rank-page  ---   复用music-list组件，从props传值，增加rank独有样式
+
+search-page  ---  包含 search-box & suggest
+                  suggeset优化 
+                    1.没有搜索结果时显示no-result
+                    2.连续请求使用节流函数debounce
+                    3.输入完搜索调用scrolllist，继续滑动时关闭键盘，使输入框失去焦点
+
+基础组件
+
+no-result  ---   如果没有搜索结果，显示相应提示，提高用验
 
 
 ```
