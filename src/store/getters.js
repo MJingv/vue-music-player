@@ -21,4 +21,4 @@ export const disc = state=> state.disc
 
 export const topList =state =>state.topList
 
-export const history =state=>state.searchHistory
+export const searchHistory =state=>state.searchHistory

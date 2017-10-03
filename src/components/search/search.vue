@@ -1,24 +1,35 @@
 <template>
 <div class="search">
   <div class="search-box-wrapper">
-    <search-box ref="searchBox" @query = "onQueryChange"></search-box>
+    <search-box ref="searchBox" @query="onQueryChange"></search-box>
   </div>
-  <div class="shortcut-wrapper "v-show='!query'>
+  <div class="shortcut-wrapper " v-show='!query'>
     <div class="shortcut">
       <div class="hot-key">
         <h1 class="title">热门搜索🔥</h1>
         <ul>
-          <li class="item"
-           v-for="item in hotKey"
-          @click="addQuery(item.k)">
+          <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
             <span>{{item.k}}</span>
           </li>
         </ul>
       </div>
+      <div class="search-history" v-show="searchHistory.length">
+        <h1 class="title">
+        <span class="text">搜索历史🔍</span>
+        <span class="clear" @click="clearSearchHistory">
+          <i class="icon-clear"></i>
+        </span>
+        </h1>
+        <search-list :searches ="searchHistory"
+                     @select ="addQuery"
+                     @delete = "deleteSearchHistory"
+                     >
+        </search-list>
+      </div>
     </div>
   </div>
   <div class="search-result" v-show='query'>
-    <suggest :query="query" @listScroll="blurInput"></suggest>
+    <suggest :query="query" @listScroll="blurInput" @select='saveSearch'></suggest>
   </div>
 </div>
 </template>
@@ -31,26 +42,36 @@ import {
 import {
   ERR_OK
 } from 'api/config'
-import {mapActions} from 'vuex'
+import {
+  mapActions,
+  mapGetters
+} from 'vuex'
 import Suggest from 'components/suggest/suggest'
+import SearchList from 'base/search-list/search-list'
 export default {
   data() {
     return {
       hotKey: [],
-      query:'',
+      query: '',
     }
   },
+  computed: {
+    ...mapGetters([
+      'searchHistory'
+    ])
+
+  },
   methods: {
-    saveSearch(){
+    saveSearch() {
       this.saveSearchHistory(this.query)
     },
-    blurInput(){
+    blurInput() {
       this.$refs.searchBox.blur()
     },
-    onQueryChange(query){
-      this.query=query
+    onQueryChange(query) {
+      this.query = query
     },
-    addQuery(query){
+    addQuery(query) {
       this.$refs.searchBox.setQuery(query)
     },
     _getHotKey() {
@@ -62,14 +83,16 @@ export default {
       })
     },
     ...mapActions([
-       'saveSearchHistory'
-     ])
+      'saveSearchHistory','deleteSearchHistory','clearSearchHistory'
+    ])
   },
   created() {
     this._getHotKey()
   },
   components: {
-    SearchBox,Suggest
+    SearchBox,
+    Suggest,
+    SearchList,
   }
 }
 </script>
