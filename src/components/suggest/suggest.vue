@@ -1,5 +1,12 @@
 <template>
-<scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" ref="suggest">
+<scroll class="suggest"  ref="suggest"
+ :data="result"
+ :pullup="pullup"
+ @scrollToEnd="searchMore"
+ :beforeScroll='beforeScroll'
+ @beforeScroll="listScroll"
+
+>
   <ul class="suggest-list">
     <li @click='selectItem(item)' class="suggest-item" v-for="item in result">
       <div class="icon">
@@ -11,7 +18,10 @@
     </li>
     <loading v-show="hasMore"></loading>
   </ul>
-  <router-view></router-view>
+  <div class="no-result-wrapper" v-show="!hasMore && !result.length">
+    <no-result title="试试其他关键字吧٩(๑´0`๑)۶">
+    </no-result>
+  </div>
 </scroll>
 </template>
 
@@ -29,9 +39,10 @@ import {
 import Loading from 'base/loading/loading'
 import Singer from 'common/js/singer'
 import {
-  mapMutations,mapActions
+  mapMutations,
+  mapActions
 } from 'vuex'
-
+import NoResult from 'base/no-result/no-result'
 const TYPE_SINGER = 'singer'
 const perpage = 20
 
@@ -39,6 +50,7 @@ export default {
   components: {
     Scroll,
     Loading,
+    NoResult
   },
   props: {
     query: {
@@ -62,9 +74,13 @@ export default {
       result: [],
       pullup: true,
       hasMore: true,
+      beforeScroll:true,
     }
   },
   methods: {
+    listScroll(){
+      this.$emit('listScroll')
+    },
     selectItem(item) {
       if (item.type === TYPE_SINGER) {
         const singer = new Singer({
@@ -76,7 +92,7 @@ export default {
         })
         //修改当前singer
         this.setSinger(singer)
-      }else{
+      } else {
         //调用action，insert一首歌
         this.insertSong(item)
       }
@@ -162,8 +178,8 @@ export default {
       setSinger: 'SET_SINGER'
     }),
     ...mapActions([
-      'insertSong'
-    ]
+        'insertSong'
+      ]
 
     )
   },

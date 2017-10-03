@@ -27,3 +27,17 @@ export function shuffle(arr) {
   })
   return _arr
 }
+
+export function debounce(func, delay) {
+  //实现节流函数
+  let timer
+  return function(...args) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      func.apply(this,args)
+    }, delay)
+
+  }
+}

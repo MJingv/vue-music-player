@@ -16,7 +16,7 @@
     </div>
   </div>
   <div class="search-result" v-show='query'>
-    <suggest :query="query"></suggest>
+    <suggest :query="query" @listScroll="blurInput"></suggest>
   </div>
 </div>
 </template>
@@ -38,6 +38,9 @@ export default {
     }
   },
   methods: {
+    blurInput(){
+      this.$refs.searchBox.blur()
+    },
     onQueryChange(query){
       this.query=query
     },

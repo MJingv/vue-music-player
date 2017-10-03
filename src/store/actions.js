@@ -1,7 +1,5 @@
 //异步操作||对mutation封装(需要多个mutations的复杂操作)
 //commit a mutation
-
-
 import * as types from './mutation-types'
 import {playMode} from 'common/js/config'
 import {shuffle} from 'common/js/util'
@@ -42,7 +40,6 @@ export const randomPlay = function({
   commit(types.SET_PLAYING_STATE, true)
   commit(types.SET_FULL_SCREEN, true)
 }
-
 export const insertSong = function({
   commit,
   state

@@ -10,6 +10,9 @@
 import {
   ERR_OK
 } from 'api/config'
+import {
+  debounce
+} from 'common/js/util'
 
 export default {
   props: {
@@ -27,6 +30,10 @@ export default {
   },
 
   methods: {
+    blur(){
+      this.$refs.query.blur()
+
+    },
     clear() {
       this.query = ''
     },
@@ -37,12 +44,11 @@ export default {
 
   created() {
     //将input输入数据传出去
-    this.$watch('query', (newVal) => {
+    //节流watch的回调,delay=200ms
+    this.$watch('query', debounce((newVal) => {
       this.$emit('query', newVal)
-
-    })
+    }, 200))
   }
-
 }
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
