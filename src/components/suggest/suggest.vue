@@ -1,5 +1,6 @@
 <template>
-<scroll class="suggest"  ref="suggest"
+<scroll class="suggest"
+ ref="suggest"
  :data="result"
  :pullup="pullup"
  @scrollToEnd="searchMore"
@@ -77,6 +78,9 @@ export default {
     }
   },
   methods: {
+    refresh(){
+      this.$refs.suggest.refresh()
+    },
     listScroll(){
       this.$emit('listScroll')
     },
