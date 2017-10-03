@@ -7,13 +7,8 @@ export const commonParams = {
 }
 
 export const options = {
-  param: 'jsonpCallback'
-}
-
-export const options1 = {
-  //修复bug：歌单推荐jsonp的要指定特定prefix
   param: 'jsonpCallback',
-  prefix: 'playlistinfoCallback'
+  prefix: 'jp'
 }
 
 export const ERR_OK = 0

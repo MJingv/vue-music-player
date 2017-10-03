@@ -1,7 +1,7 @@
-<template >
-<scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore">
+<template>
+<scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore" ref ="suggest" >
   <ul class="suggest-list">
-    <li class="suggest-item" v-for="item in result">
+    <li @click= 'selectItem(item)' class="suggest-item" v-for="item in result">
       <div class="icon">
         <i :class="getIconCls(item)"></i>
       </div>
@@ -11,7 +11,9 @@
     </li>
     <loading v-show="hasMore" ></loading>
   </ul>
+  <router-view></router-view>
 </scroll>
+
 </template>
 
 <script>
@@ -20,20 +22,22 @@ import {
   ERR_OK
 } from 'api/config'
 import {
-  filterSinger,
   createSong
 } from 'common/js/song'
 import {
   search
 } from 'api/search'
 import Loading from 'base/loading/loading'
-const TYPE_SINGER = 'singer'
+import Singer from 'common/js/singer'
+import {mapMutations} from 'vuex'
+
+const TYPE_SINGER = 2
 const perpage = 20
 
 export default {
   components: {
     Scroll,
-    Loading
+    Loading,
   },
   props: {
     query: {
@@ -60,6 +64,19 @@ export default {
     }
   },
   methods: {
+    selectItem(item){
+      if(item.type === TYPE_SINGER){
+        const singer  = new Singer({
+          id:item.singermid,
+          name:item.singername
+        })
+        this.$router.push({
+          path:`/search/${singer.id}`
+        })
+        //修改当前singer
+        this.setSinger(singer)
+      }
+    },
     searchMore() {
       if (this._hasMore) {
         return
@@ -67,9 +84,10 @@ export default {
       this.page++
         search(this.query, this.page, this.showSinger, perpage).then((res) => {
           if (res.code == ERR_OK) {
-            console.log(res.data);
+
             this.result = this.result.concat(this._getResult(res.data))
             this._checkMore(res.data)
+
           }
         })
 
@@ -91,34 +109,36 @@ export default {
       }
     },
     search() {
+      this.page=1
       this.hasMore = true
+      this.$refs.suggest.scrollTo(0,0)
       search(this.query, this.page, this.showSinger, perpage).then((res) => {
         if (res.code == ERR_OK) {
-          console.log(res.data);
           this.result = this._getResult(res.data)
           this._checkMore(res.data)
-
+        
         }
       })
-
     },
     _checkMore(data) {
+      //是否有更多数据
       const song = data.song
       if (!song.list.length ||
-        song.totalnum < (song.curpage * perpage + song.curnum)) {
+        song.totalnum <= (song.curpage * perpage + song.curnum)) {
         this.hasMore = false
-
       }
     },
     _getResult(data) {
       let ret = []
+
       if (data.zhida && data.zhida.singerId) {
         ret.push({
           ...data.zhida,
-          ...{
-            type: TYPE_SINGER
-          }
+          // ...{
+          //   type: TYPE_SINGER
+          // }
         })
+
       }
       if (data.song) {
         ret = ret.concat(this._normalizeSongs(data.song.list))
@@ -134,8 +154,10 @@ export default {
       })
       return ret
     },
+    ...mapMutations({
+      setSinger:'SET_SINGER'
+    })
   },
-
   watch: {
     query() {
       //当query值改变时调用seach重新请求数据
@@ -145,8 +167,6 @@ export default {
 }
 </script>
 
-
-</script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
