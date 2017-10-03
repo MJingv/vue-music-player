@@ -5,7 +5,6 @@
  @scrollToEnd="searchMore"
  :beforeScroll='beforeScroll'
  @beforeScroll="listScroll"
-
 >
   <ul class="suggest-list">
     <li @click='selectItem(item)' class="suggest-item" v-for="item in result">
@@ -96,6 +95,9 @@ export default {
         //调用action，insert一首歌
         this.insertSong(item)
       }
+      //点击li会进行添加到history的系列操作，在这里emit
+      this.$emit('select')
+
     },
     searchMore() {
       if (this._hasMore) {

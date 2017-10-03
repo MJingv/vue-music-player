@@ -8,7 +8,9 @@
       <div class="hot-key">
         <h1 class="title">热门搜索🔥</h1>
         <ul>
-          <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
+          <li class="item"
+           v-for="item in hotKey"
+          @click="addQuery(item.k)">
             <span>{{item.k}}</span>
           </li>
         </ul>
@@ -29,6 +31,7 @@ import {
 import {
   ERR_OK
 } from 'api/config'
+import {mapActions} from 'vuex'
 import Suggest from 'components/suggest/suggest'
 export default {
   data() {
@@ -38,6 +41,9 @@ export default {
     }
   },
   methods: {
+    saveSearch(){
+      this.saveSearchHistory(this.query)
+    },
     blurInput(){
       this.$refs.searchBox.blur()
     },
@@ -55,6 +61,9 @@ export default {
         }
       })
     },
+    ...mapActions([
+       'saveSearchHistory'
+     ])
   },
   created() {
     this._getHotKey()
