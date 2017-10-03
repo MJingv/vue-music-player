@@ -1,5 +1,5 @@
 <template >
-<div class="suggest">
+<scroll class="suggest" :data="result" :pullup="pullup" @scrollToEnd="searchMore">
   <ul class="suggest-list">
     <li class="suggest-item" v-for="item in result">
       <div class="icon">
@@ -9,22 +9,32 @@
         <p class="text" v-html="getDisplayName(item)"></p>
       </div>
     </li>
+    <loading v-show="hasMore" ></loading>
   </ul>
-</div>
+</scroll>
 </template>
 
 <script>
+import Scroll from 'base/scroll/scroll'
 import {
   ERR_OK
 } from 'api/config'
 import {
-  filterSinger,createSong
+  filterSinger,
+  createSong
 } from 'common/js/song'
 import {
   search
 } from 'api/search'
+import Loading from 'base/loading/loading'
 const TYPE_SINGER = 'singer'
+const perpage = 20
+
 export default {
+  components: {
+    Scroll,
+    Loading
+  },
   props: {
     query: {
       //检索词
@@ -44,11 +54,26 @@ export default {
   data() {
     return {
       page: 1,
-      result: []
-
+      result: [],
+      pullup: true,
+      hasMore: true,
     }
   },
   methods: {
+    searchMore() {
+      if (this._hasMore) {
+        return
+      }
+      this.page++
+        search(this.query, this.page, this.showSinger, perpage).then((res) => {
+          if (res.code == ERR_OK) {
+            console.log(res.data);
+            this.result = this.result.concat(this._getResult(res.data))
+            this._checkMore(res.data)
+          }
+        })
+
+    },
     getDisplayName(item) {
       if (item.type == TYPE_SINGER) {
         return item.singername
@@ -66,13 +91,24 @@ export default {
       }
     },
     search() {
-      search(this.query, this.page, this.showSinger).then((res) => {
+      this.hasMore = true
+      search(this.query, this.page, this.showSinger, perpage).then((res) => {
         if (res.code == ERR_OK) {
           console.log(res.data);
           this.result = this._getResult(res.data)
+          this._checkMore(res.data)
+
         }
       })
 
+    },
+    _checkMore(data) {
+      const song = data.song
+      if (!song.list.length ||
+        song.totalnum < (song.curpage * perpage + song.curnum)) {
+        this.hasMore = false
+
+      }
     },
     _getResult(data) {
       let ret = []
@@ -89,10 +125,10 @@ export default {
       }
       return ret
     },
-    _normalizeSongs(list){
-      let ret=[]
-      list.forEach((musicData)=>{
-        if(musicData.songid && musicData.albumid){
+    _normalizeSongs(list) {
+      let ret = []
+      list.forEach((musicData) => {
+        if (musicData.songid && musicData.albumid) {
           ret.push(createSong(musicData))
         }
       })

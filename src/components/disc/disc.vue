@@ -3,7 +3,6 @@
   <music-list :bgImage="bgImage" :title="title" :songs="songs"></music-list>
 </transition>
 </template>
-
 <script >
 import {
   ERR_OK
@@ -49,8 +48,9 @@ export default {
       }
       getSongList(this.disc.dissid).then((res) => {
         if (res.code == ERR_OK) {
-           console.log(res.cdlist[0].songlist);
-           this.songs = this._normalizeSongs(res.cdlist[0].songlist)
+
+           console.log(res);
+          // this.songs = this._normalizeSongs(res.cdlist[0].songlist)
         }
       })
     },

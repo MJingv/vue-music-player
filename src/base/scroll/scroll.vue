@@ -26,6 +26,7 @@
         default: null
       },
       pullup: {
+        //上拉刷新
         type: Boolean,
         default: false
       },
