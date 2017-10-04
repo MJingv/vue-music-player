@@ -4,8 +4,8 @@
     <div class="list-wrapper" @click.stop>
       <div class="list-header">
         <h1 class="title">
-            <i class="icon"></i>
-            <span class="text"></span>
+            <i class="icon" :class="iconMode" @click="changeMode"></i>
+            <span class="text">{{modeText}}</span>
             <span class="clear" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
@@ -49,7 +49,6 @@
 <script type="text/ecmascript-6">
 import {
   mapGetters,
-  mapMutations,
   mapActions,
 } from 'vuex'
 import Scroll from 'base/scroll/scroll.vue'
@@ -57,7 +56,14 @@ import {
   playMode
 } from 'common/js/config'
 import Confirm from 'base/confirm/confirm'
+import {playerMixin} from 'common/js/mixin'
 export default {
+    mixins:[playerMixin,],
+    computed:{
+      modeText(){
+        return this.mode === playMode.sequence?'顺序播放':this.mode=== playMode.random?'随机播放':'单曲循环'
+      }
+    },
   data() {
     return {
       showFlag: false
@@ -71,15 +77,9 @@ export default {
         this.scrollToCurrent(newSong)
       }
     }
-
   },
   components: {
     Scroll,Confirm
-  },
-  computed: {
-    ...mapGetters([
-      'sequenceList', 'currentSong', 'playlist','mode'
-    ])
   },
   methods: {
     confirmClear(){
@@ -135,11 +135,7 @@ export default {
     hide() {
       this.showFlag = false
     },
-    ...mapMutations({
-      'setCurrentIndex': 'SET_CURRENT_INDEX',
-      'setPlayingState':'SET_PLAYING_STATE'
 
-    }),
     ...mapActions([
       'deleteSong',
       'deleteSongList'
