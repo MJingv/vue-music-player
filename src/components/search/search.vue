@@ -7,7 +7,7 @@
     <scroll class="shortcut" :data="shortcut" ref='shortcut'>
       <div>
         <div class="hot-key">
-          <h1 class="title">热门搜索🔥</h1>
+          <h1 class="title">热门搜索</h1>
           <ul>
             <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
               <span>{{item.k}}</span>
@@ -16,7 +16,7 @@
         </div>
         <div class="search-history" v-show="searchHistory.length">
           <h1 class="title">
-        <span class="text">历史记录🔍</span>
+        <span class="text">历史记录</span>
         <span class="clear" @click="showConfirm">
           <i class="icon-clear"></i>
         </span>
@@ -30,7 +30,7 @@
   <div class="search-result" ref="searchResult" v-show='query'>
     <suggest :query="query" @listScroll="blurInput" ref="suggest" @select='saveSearch'></suggest>
   </div>
-  <confirm ref='confirm' text="çĄŽĺŽčŚć¸çŠşĺďź" confirmBtnText="ć¸çŠş" @confirm="clearSearchHistory"></confirm>
+  <confirm ref='confirm' text="clear all ?" confirmBtnText="clear" @confirm="clearSearchHistory"></confirm>
   <router-view></router-view>
 </div>
 </template>
@@ -57,7 +57,7 @@ import {
 
 
 export default {
-  mixins: [playlistMixin],
+  // mixins: [playlistMixin],
   data() {
     return {
       hotKey: [],
@@ -66,7 +66,6 @@ export default {
   },
   computed: {
     shortcut() {
-      //ĺ˝hotkeyďźsearchhistoryäşčĺśä¸ĺçćšĺďźĺscrolléć°čŽĄçŽ
       return this.hotKey.concat(this.searchHistory)
     },
     ...mapGetters([
@@ -84,16 +83,6 @@ export default {
     }
   },
   methods: {
-    handlePlayList(playlist) {
-      const bottom = playlist.length > 0 ? '60px' : ''
-      this.$refs.shortcutWrapper.style.bottom = bottom
-      //dom组件变化了，手动调用刷新scroll组件
-      this.$refs.shortcut.refresh()
-
-      this.$refs.searchResult.style.bottom = bottom
-      //dom组件变化了，手动调用刷新scroll组件
-      this.$refs.suggest.refresh()
-    },
     showConfirm() {
       this.$refs.confirm.show()
     },
@@ -112,11 +101,18 @@ export default {
     _getHotKey() {
       getHotKey().then((res) => {
         if (res.code === ERR_OK) {
-          //ÄÂĹÄşÂÂÄşÂÂÄşÂÂĂ¤Â¸ĹÄÂÂ°ÄÂĹ˝
+        //截取前十个数据
           this.hotKey = res.data.hotkey.slice(0, 10)
         }
       })
     },
+    // handlePlayList(playlist) {
+    //   const bottom = playlist.length > 0 ? '60px' : ''
+    //   this.$refs.shortcutWrapper.style.bottom = bottom
+    //   this.$refs.shortcut.refresh()
+    //   this.$refs.searchResult.style.bottom = bottom
+    //   this.$refs.suggest.refresh()
+    // },
     ...mapActions([
       'saveSearchHistory', 'deleteSearchHistory', 'clearSearchHistory'
     ])

@@ -23,7 +23,6 @@
             <div class="playing-lyric">
               {{playingLyric}}
             </div>
-
           </div>
         </div>
         <scroll class="middle-r" ref="lyricList" :data="currentLyric && currentLyric.lines">
@@ -40,7 +39,6 @@
           <span class="dot" :class="{'active': currentShow === 'lyric'}">></span>
         </div>
         <div class="progress-wrapper">
-
           <span class="time time-l">{{format(currentTime)}}</span>
           <div class="progress-bar-wrapper">
             <progress-bar :percent="percent" @percentChange="onProgressBarChange"></progress-bar>
@@ -62,11 +60,8 @@
           </div>
           <div class="icon i-right">
             <i class="icon icon-not-favorite"></i>
-
           </div>
-
         </div>
-
       </div>
     </div>
   </transition>
@@ -87,16 +82,15 @@
         </progress-circle>
 
       </div>
-      <div class="control">
+      <div class="control" @click = "showPlaylist">
         <i class="icon-playlist"></i>
       </div>
-
     </div>
   </transition>
+  <playlist ref="playlist"></playlist>
   <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
 </div>
 </template>
-
 
 <script>
 import {
@@ -117,7 +111,7 @@ import {
 } from 'common/js/util'
 import Scroll from 'base/scroll/scroll'
 import ProgressCircle from 'base/progress-circle/progress-circle'
-
+import Playlist from 'components/playlist/playlist'
 
 const transform = prefixStyle("transform")
 const transitionDuration = prefixStyle("transitionDuration")
@@ -126,7 +120,8 @@ export default {
   components: {
     Scroll,
     ProgressBar,
-    ProgressCircle
+    ProgressCircle,
+    Playlist,
   },
   data() {
     return {
@@ -145,6 +140,9 @@ export default {
   },
 
   methods: {
+    showPlaylist(){
+      this.$refs.playlist.show()
+    },
     middleTouchStart(e) {
       this.touch.initiated = true
       const touch = e.touches[0]
@@ -250,9 +248,9 @@ export default {
       this.setPlayMode(mode)
       let list = null
       if (mode === playMode.random) {
-        console.log(list+'old');
+        console.log(list + 'old');
         list = shuffle(this.sequenceList)
-      console.log(list+'new');
+        console.log(list + 'new');
       } else {
         list = this.sequenceList
       }
@@ -460,7 +458,7 @@ export default {
         //dom完成后的回调
         this.$refs.audio.play()
         this.getLyric()
-      },1000)
+      }, 1000)
 
 
     },
