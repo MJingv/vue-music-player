@@ -26,8 +26,14 @@
       </div>
     </div>
     <div class="search-result" v-show="query">
-      <suggest @select="saveSearch" :query="query" :showSinger="showSinger" @listScroll="blurInput"></suggest>
+      <suggest @select="selectSuggest" :query="query" :showSinger="showSinger" @listScroll="blurInput"></suggest>
     </div>
+    <top-tip ref='topTip'>
+      <div class="tip-title">
+        <i class="icon-ok"></i>
+        <span class="text">一首歌曲已经添加到播放列表</span>
+      </div>
+    </top-tip>
   </div>
 </transition>
 </template>
@@ -36,6 +42,7 @@
 import SearchBox from 'base/search-box/search-box'
 import SearchList from 'base/search-list/search-list.vue'
 import Suggest from 'components/suggest/suggest.vue'
+import TopTip from 'base/top-tip/top-tip.vue'
 import {
   searchMixin
 } from 'common/js/mixin'
@@ -51,6 +58,7 @@ export default {
   mixins: [searchMixin],
   components: {
     SearchList,
+    TopTip,
     SearchBox,
     Suggest,
     Switches,
@@ -77,11 +85,19 @@ export default {
     }
   },
   methods: {
+    selectSuggest() {
+      this.saveSearch()
+      this.showTip()
+    },
+    showTip() {
+      this.$refs.topTip.show()
+    },
     selectSong(song, index) {
       //将当前歌曲实例化并插入到当前播放列表中
       if (index !== 0) {
         //把不是当前播放的歌曲插入
         this.insertSong(new Song(song))
+        this.showTip()
       }
     },
     switchItem(index) {
