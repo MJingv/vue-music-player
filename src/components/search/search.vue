@@ -54,23 +54,19 @@ import Scroll from 'base/scroll/scroll'
 import {
   playlistMixin
 } from 'common/js/mixin'
-
+import {searchMixin} from 'common/js/mixin'
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [playlistMixin,searchMixin],
   data() {
     return {
       hotKey: [],
-      query: '',
     }
   },
   computed: {
     shortcut() {
       return this.hotKey.concat(this.searchHistory)
     },
-    ...mapGetters([
-      'searchHistory'
-    ])
 
   },
   watch: {
@@ -86,18 +82,7 @@ export default {
     showConfirm() {
       this.$refs.confirm.show()
     },
-    saveSearch() {
-      this.saveSearchHistory(this.query)
-    },
-    blurInput() {
-      this.$refs.searchBox.blur()
-    },
-    onQueryChange(query) {
-      this.query = query
-    },
-    addQuery(query) {
-      this.$refs.searchBox.setQuery(query)
-    },
+
     _getHotKey() {
       getHotKey().then((res) => {
         if (res.code === ERR_OK) {
@@ -114,7 +99,7 @@ export default {
       this.$refs.suggest.refresh()
     },
     ...mapActions([
-      'saveSearchHistory', 'deleteSearchHistory', 'clearSearchHistory'
+       'clearSearchHistory'
     ])
   },
   created() {

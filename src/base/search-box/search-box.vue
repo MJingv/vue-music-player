@@ -21,18 +21,15 @@ export default {
       default: '搜索歌曲、歌手'
     },
   },
-
   data() {
     return {
       query: '',
-
     }
   },
 
   methods: {
-    blur(){
+    blur() {
       this.$refs.query.blur()
-
     },
     clear() {
       this.query = ''
@@ -41,7 +38,6 @@ export default {
       this.query = query
     },
   },
-
   created() {
     //将input输入数据传出去
     //节流watch的回调,delay=200ms
@@ -53,7 +49,6 @@ export default {
 </script>
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
-
   .search-box
     display: flex
     align-items: center
