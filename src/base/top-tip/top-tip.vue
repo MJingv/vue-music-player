@@ -8,10 +8,10 @@
 
 <script type="text/ecmascript-6">
 export default {
-  props:{
-    delay:{
-      type:Number,
-      default:2000
+  props: {
+    delay: {
+      type: Number,
+      default: 2000
     }
   },
   data() {

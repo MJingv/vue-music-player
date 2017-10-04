@@ -11,7 +11,7 @@
             </span>
           </h1>
       </div>
-      <scroll ref="listContent" class="list-content" :data="sequenceList">
+      <scroll ref="listContent" class="list-content" :refreshDelay ="refreshDelay" :data="sequenceList">
         <transition-group name="list" tag="ul">
           <li :key="item.id"ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)" >
             <i class="current" :class="getCurrentIcon(item)"></i>
@@ -66,7 +66,8 @@ export default {
     },
   data() {
     return {
-      showFlag: false
+      showFlag: false,
+      refreshDelay:100,
     }
   },
   watch:{
@@ -125,20 +126,20 @@ export default {
     },
     show() {
       this.showFlag = true
-      // setTimeout(()=>{
-      //   this.$refs.listContent.refresh()
-      //   this.scrollToCurrent(this.currentSong)
-      // },20)
-      this.$nextTick(() => {
-        //在dom更新后再refresh
+      setTimeout(()=>{
         this.$refs.listContent.refresh()
         this.scrollToCurrent(this.currentSong)
-      })
+      },this.refreshDelay)
+
+      // this.$nextTick(() => {
+      //   //在dom更新后再refresh
+      //   this.$refs.listContent.refresh()
+      //   this.scrollToCurrent(this.currentSong)
+      // })
     },
     hide() {
       this.showFlag = false
     },
-
     ...mapActions([
       'deleteSong',
       'deleteSongList'

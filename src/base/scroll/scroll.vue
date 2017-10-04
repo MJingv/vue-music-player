@@ -9,6 +9,10 @@
 
   export default {
     props: {
+      refreshDelay:{
+        tyep:Number,
+        default:20
+      },
       probeType: {
         type: Number,
         default: 1
@@ -41,7 +45,7 @@
     mounted() {
       setTimeout(() => {
         this._initScroll()
-      }, 20)
+      }, this.refreshDelay)
     },
     methods: {
       _initScroll() {
