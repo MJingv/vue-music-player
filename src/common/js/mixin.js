@@ -36,10 +36,10 @@ export const playerMixin = {
           : 'icon-random'
     },
     ...mapGetters([
-      'fullScreen',
+
       'playlist',
       'currentSong',
-      'playing',
+
       'currentIndex',
       'mode',
       'sequenceList'

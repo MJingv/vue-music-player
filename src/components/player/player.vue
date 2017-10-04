@@ -457,6 +457,7 @@ export default {
   },
   computed: {
 
+
     percent() {
       return this.currentTime / this.currentSong.duration
     },
@@ -472,6 +473,11 @@ export default {
     miniIcon() {
       return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
     },
+    ...mapGetters([
+      'currentIndex',
+      'fullScreen',
+      'playing'
+    ])
 
   }
 }

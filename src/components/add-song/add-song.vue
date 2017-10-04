@@ -8,14 +8,19 @@
       </div>
     </div>
     <div class="search-box-wrapper">
-      <search-box placehold="搜索歌曲" @query="onQueryChange"></search-box>
+      <search-box ref="searchBox" placehold="搜索歌曲" @query="onQueryChange"></search-box>
     </div>
     <div class="shortcut" v-show="!query">
       <switches :switches="switches" @switch="switchItem" :currentIndex="currentIndex"></switches>
       <div class="list-wrapper">
-        <scroll class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
+        <scroll ref="songList" class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
           <div class="list-inner">
             <song-list @select="selectSong" :songs="playHistory"></song-list>
+          </div>
+        </scroll>
+        <scroll ref="searchList" class="list-scroll" v-if="currentIndex === 1" :data="searchHistory">
+          <div class="list-inner">
+            <search-list :searches="searchHistory" @delete="deleteSearchHistory" @select="addQuery"></search-list>
           </div>
         </scroll>
       </div>
@@ -29,6 +34,7 @@
 
 <script type="text/ecmascript-6">
 import SearchBox from 'base/search-box/search-box'
+import SearchList from 'base/search-list/search-list.vue'
 import Suggest from 'components/suggest/suggest.vue'
 import {
   searchMixin
@@ -37,12 +43,14 @@ import Switches from 'base/switches/switches'
 import Scroll from 'base/scroll/scroll.vue'
 import SongList from 'base/song-list/song-list.vue'
 import {
-  mapGetters,mapActions
+  mapGetters,
+  mapActions
 } from 'vuex'
 import Song from 'common/js/song'
 export default {
   mixins: [searchMixin],
   components: {
+    SearchList,
     SearchBox,
     Suggest,
     Switches,
@@ -51,7 +59,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'playHistory',
+      'playHistory', 'searchHistory'
     ])
   },
   data() {
@@ -69,11 +77,11 @@ export default {
     }
   },
   methods: {
-    selectSong(item,index){
+    selectSong(song, index) {
       //将当前歌曲实例化并插入到当前播放列表中
-      if(index!==0){
+      if (index !== 0) {
         //把不是当前播放的歌曲插入
-        this.insertSong(new Song(item))
+        this.insertSong(new Song(song))
       }
     },
     switchItem(index) {
@@ -81,6 +89,14 @@ export default {
     },
     show() {
       this.showFlag = true
+      setTimeout(() => {
+        //debug滚动时机
+        if (this.currentIndex === 0) {
+          this.$refs.songList.refresh()
+        } else {
+          this.$refs.songList.refresh()
+        }
+      }, 20)
     },
     hide() {
       this.showFlag = false
