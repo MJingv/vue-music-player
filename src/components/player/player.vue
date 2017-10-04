@@ -95,7 +95,8 @@
 <script>
 import {
   mapGetters,
-  mapMutations
+  mapMutations,
+  mapActions
 } from 'vuex'
 import Lyric from 'lyric-parser'
 import animations from 'create-keyframe-animation'
@@ -112,13 +113,15 @@ import {
 import Scroll from 'base/scroll/scroll'
 import ProgressCircle from 'base/progress-circle/progress-circle'
 import Playlist from 'components/playlist/playlist'
-import {playerMixin} from 'common/js/mixin'
+import {
+  playerMixin
+} from 'common/js/mixin'
 
 const transform = prefixStyle("transform")
 const transitionDuration = prefixStyle("transitionDuration")
 
 export default {
-  mixins:[playerMixin,],
+  mixins: [playerMixin, ],
   components: {
     Scroll,
     ProgressBar,
@@ -272,6 +275,7 @@ export default {
     ready() {
       //避免快速点击触发dom异常
       this.songReady = true
+      this.savePlayHistory(this.currentSong)
     },
     next() {
       if (!this.songReady) {
@@ -411,7 +415,8 @@ export default {
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
 
-    })
+    }),
+    ...mapActions(['savePlayHistory'])
 
   },
   watch: {

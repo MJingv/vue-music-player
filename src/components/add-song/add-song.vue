@@ -12,6 +12,13 @@
     </div>
     <div class="shortcut" v-show="!query">
       <switches :switches="switches" @switch="switchItem" :currentIndex="currentIndex"></switches>
+      <div class="list-wrapper">
+        <scroll class="list-scroll" v-if="currentIndex === 0" :data="playHistory">
+          <div class="list-inner">
+            <song-list @select="selectSong" :songs="playHistory"></song-list>
+          </div>
+        </scroll>
+      </div>
     </div>
     <div class="search-result" v-show="query">
       <suggest @select="saveSearch" :query="query" :showSinger="showSinger" @listScroll="blurInput"></suggest>
@@ -27,28 +34,50 @@ import {
   searchMixin
 } from 'common/js/mixin'
 import Switches from 'base/switches/switches'
+import Scroll from 'base/scroll/scroll.vue'
+import SongList from 'base/song-list/song-list.vue'
+import {
+  mapGetters,mapActions
+} from 'vuex'
+import Song from 'common/js/song'
 export default {
   mixins: [searchMixin],
   components: {
     SearchBox,
     Suggest,
-    Switches
+    Switches,
+    Scroll,
+    SongList,
+  },
+  computed: {
+    ...mapGetters([
+      'playHistory',
+    ])
   },
   data() {
     return {
-      currentIndex:0,
-      switches:[
-        {name:'最近播放'},
-        {name:'搜索历史'}
+      currentIndex: 0,
+      switches: [{
+          name: '最近播放'
+        },
+        {
+          name: '搜索历史'
+        }
       ],
       showFlag: false,
       showSinger: false,
     }
   },
   methods: {
-    switchItem(index){
+    selectSong(item,index){
+      //将当前歌曲实例化并插入到当前播放列表中
+      if(index!==0){
+        //把不是当前播放的歌曲插入
+        this.insertSong(new Song(item))
+      }
+    },
+    switchItem(index) {
       this.currentIndex = index
-
     },
     show() {
       this.showFlag = true
@@ -56,6 +85,9 @@ export default {
     hide() {
       this.showFlag = false
     },
+    ...mapActions([
+      'insertSong',
+    ])
   }
 }
 </script>
