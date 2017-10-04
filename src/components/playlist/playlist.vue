@@ -6,24 +6,24 @@
         <h1 class="title">
             <i class="icon"></i>
             <span class="text"></span>
-            <span class="clear">
+            <span class="clear" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
           </h1>
       </div>
       <scroll ref="listContent" class="list-content" :data="sequenceList">
-        <ul>
-          <li class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)">
+        <transition-group name="list" tag="ul">
+          <li :key="item.id"ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)" >
             <i class="current" :class="getCurrentIcon(item)"></i>
             <span class="text">{{item.name}}</span>
             <span class="like">
                 <i class="icon-not-favorite"></i>
               </span>
-            <span class="delete">
+            <span class="delete" @click.stop="deleteOne(item)">
                 <i class="icon-delete"></i>
               </span>
           </li>
-        </ul>
+        </transition-group>
       </scroll>
       <div class="list-operate">
         <div class="add">
@@ -35,36 +35,78 @@
         <span>关闭</span>
       </div>
     </div>
+      <confirm ref="confirm"
+       text="确定清空播放列表吗?"
+       confirmBtnText="清空"
+       @confirm="confirmClear"
+       ></confirm>
   </div>
+
 </transition>
+
 </template>
 
 <script type="text/ecmascript-6">
 import {
   mapGetters,
-  mapMutations
+  mapMutations,
+  mapActions,
 } from 'vuex'
 import Scroll from 'base/scroll/scroll.vue'
 import {
   playMode
 } from 'common/js/config'
+import Confirm from 'base/confirm/confirm'
 export default {
   data() {
     return {
       showFlag: false
     }
   },
+  watch:{
+    currentSong(newSong,oldSong){
+      if(!this.showFlag || newSong.id === oldSong.id){
+        return
+      }else{
+        this.scrollToCurrent(newSong)
+      }
+    }
+
+  },
   components: {
-    Scroll
+    Scroll,Confirm
   },
   computed: {
     ...mapGetters([
-      'sequenceList', 'currentSong', 'playlist'
+      'sequenceList', 'currentSong', 'playlist','mode'
     ])
   },
   methods: {
+    confirmClear(){
+      //调用action
+      this.deleteSongList()
+      this.hide()
+    },
+    showConfirm(){
+      this.$refs.confirm.show()
+    },
+    deleteOne(item){
+      //调用action
+      if(!this.playlist.length){
+        this.hide()
+      }
+      this.deleteSong(item)
+    },
+    scrollToCurrent(current){
+      //滚动到current-song
+      const index= this.sequenceList.findIndex((song)=>{
+        return song.id === current.id //！！！判断是===
+      })
+      console.log(index);
+      this.$refs.listContent.scrollToElement(this.$refs.listItem[index],300)
+    },
     selectItem(item, index) {
-      if (this.mode === playmode.random) {
+      if (this.mode === playMode.random) {
         //如果是随机播放模式
         index === this.playlist.findIndex((song) => {
           //找到随机播放列表中的选中的歌曲
@@ -72,6 +114,7 @@ export default {
         })
       }
       this.setCurrentIndex(index)
+      this.setPlayingState(true)
     },
     getCurrentIcon(item) {
       //给current-song添加特定样式
@@ -79,22 +122,29 @@ export default {
     },
     show() {
       this.showFlag = true
+      // setTimeout(()=>{
+      //   this.$refs.listContent.refresh()
+      //   this.scrollToCurrent(this.currentSong)
+      // },20)
       this.$nextTick(() => {
         //在dom更新后再refresh
         this.$refs.listContent.refresh()
+        this.scrollToCurrent(this.currentSong)
       })
     },
     hide() {
       this.showFlag = false
     },
     ...mapMutations({
-      'setCurrentIndex': 'SET_CURRENT_INDEX'
-    })
+      'setCurrentIndex': 'SET_CURRENT_INDEX',
+      'setPlayingState':'SET_PLAYING_STATE'
+
+    }),
+    ...mapActions([
+      'deleteSong',
+      'deleteSongList'
+    ])
   },
-
-
-
-
 
 
 }

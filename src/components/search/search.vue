@@ -57,7 +57,7 @@ import {
 
 
 export default {
-  // mixins: [playlistMixin],
+  mixins: [playlistMixin],
   data() {
     return {
       hotKey: [],
@@ -106,13 +106,13 @@ export default {
         }
       })
     },
-    // handlePlayList(playlist) {
-    //   const bottom = playlist.length > 0 ? '60px' : ''
-    //   this.$refs.shortcutWrapper.style.bottom = bottom
-    //   this.$refs.shortcut.refresh()
-    //   this.$refs.searchResult.style.bottom = bottom
-    //   this.$refs.suggest.refresh()
-    // },
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.shortcutWrapper.style.bottom = bottom
+      this.$refs.shortcut.refresh()
+      this.$refs.searchResult.style.bottom = bottom
+      this.$refs.suggest.refresh()
+    },
     ...mapActions([
       'saveSearchHistory', 'deleteSearchHistory', 'clearSearchHistory'
     ])
