@@ -1,33 +1,38 @@
 <template>
 <transition name="slide">
   <div class="user-center">
+
     <div class="back">
       <i class="icon-back" @click='back'></i>
     </div>
+
     <div class="switches-wrapper">
       <switches @switch="selectItem" :switches="switches" :currentIndex="currentIndex"></switches>
     </div>
+
     <div class="play-btn" ref="playBtn">
       <i class="icon-play"></i>
       <span class="text" @click="random">随机播放全部</span>
     </div>
+
     <div class="list-wrapper" ref="listWrapper">
-      <scroll ref="favoriteList" class="list-scroll" v-if="currentIndex === 0" :data="favoriteList">
+      <scroll ref="favoriteList" class="list-scroll" v-if="currentIndex === 0"  :data="favoriteList">
         <div class="list-inner">
           <song-list @select="selectSong" :songs="favoriteList"></song-list>
         </div>
       </scroll>
+
       <scroll ref="playList" class="list-scroll" v-if="currentIndex === 1" :data="playHistory">
         <div class="list-inner">
           <song-list @select="selectSong" :songs="playHistory"></song-list>
         </div>
       </scroll>
     </div>
-    <div class="list-wrapper" ref="listWrapper">
-    </div>
+
     <div class="no-result-wrapper" v-if="noResult">
       <no-result :title="noResultDesc"></no-result>
     </div>
+
   </div>
 </transition>
 </template>
@@ -59,8 +64,8 @@ export default {
     }
   },
   computed: {
-    noResultDesc(){
-      return this.currentIndex === 0 ? '暂无收藏歌曲':'你还没有听过歌曲'
+    noResultDesc() {
+      return this.currentIndex === 0 ? '暂无收藏歌曲' : '你还没有听过歌曲'
     },
 
     noResult() {
