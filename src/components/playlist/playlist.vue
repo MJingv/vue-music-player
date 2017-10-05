@@ -11,13 +11,13 @@
             </span>
           </h1>
       </div>
-      <scroll ref="listContent" class="list-content" :refreshDelay ="refreshDelay" :data="sequenceList">
+      <scroll ref="listContent" class="list-content" :refreshDelay="refreshDelay" :data="sequenceList">
         <transition-group name="list" tag="ul">
-          <li :key="item.id"ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)" >
+          <li :key="item.id" ref="listItem" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item,index)">
             <i class="current" :class="getCurrentIcon(item)"></i>
             <span class="text">{{item.name}}</span>
-            <span class="like">
-                <i class="icon-not-favorite"></i>
+            <span class="like" @click.stop="toggleFavorite(item)">
+                <i :class="getFavoriteIcon(item)" ></i>
               </span>
             <span class="delete" @click.stop="deleteOne(item)">
                 <i class="icon-delete"></i>
@@ -27,7 +27,7 @@
       </scroll>
       <div class="list-operate">
         <div class="add" @click="addSong">
-          <i class="icon-add" ></i>
+          <i class="icon-add"></i>
           <span class="text">添加歌曲到列表</span>
         </div>
       </div>
@@ -35,12 +35,8 @@
         <span>关闭</span>
       </div>
     </div>
-      <confirm ref="confirm"
-       text="确定清空播放列表吗?"
-       confirmBtnText="清空"
-       @confirm="confirmClear"
-       ></confirm>
-       <add-song ref="addSong"></add-song>
+    <confirm ref="confirm" text="确定清空播放列表吗?" confirmBtnText="清空" @confirm="confirmClear"></confirm>
+    <add-song ref="addSong"></add-song>
   </div>
 </transition>
 </template>
@@ -55,59 +51,63 @@ import {
   playMode
 } from 'common/js/config'
 import Confirm from 'base/confirm/confirm'
-import {playerMixin} from 'common/js/mixin'
+import {
+  playerMixin
+} from 'common/js/mixin'
 import AddSong from 'components/add-song/add-song'
 export default {
-    mixins:[playerMixin,],
-    computed:{
-      modeText(){
-        return this.mode === playMode.sequence?'顺序播放':this.mode=== playMode.random?'随机播放':'单曲循环'
-      }
-    },
+  mixins: [playerMixin, ],
+  computed: {
+    modeText() {
+      return this.mode === playMode.sequence ? '顺序播放' : this.mode === playMode.random ? '随机播放' : '单曲循环'
+    }
+  },
   data() {
     return {
       showFlag: false,
-      refreshDelay:100,
+      refreshDelay: 100,
     }
   },
-  watch:{
-    currentSong(newSong,oldSong){
-      if(!this.showFlag || newSong.id === oldSong.id){
+  watch: {
+    currentSong(newSong, oldSong) {
+      if (!this.showFlag || newSong.id === oldSong.id) {
         return
-      }else{
+      } else {
         this.scrollToCurrent(newSong)
       }
     }
   },
   components: {
-    Scroll,Confirm,AddSong
+    Scroll,
+    Confirm,
+    AddSong
   },
   methods: {
-    addSong(){
+    addSong() {
       this.$refs.addSong.show()
     },
-    confirmClear(){
+    confirmClear() {
       //调用action
       this.deleteSongList()
       this.hide()
     },
-    showConfirm(){
+    showConfirm() {
       this.$refs.confirm.show()
     },
-    deleteOne(item){
+    deleteOne(item) {
       //调用action
-      if(!this.playlist.length){
+      if (!this.playlist.length) {
         this.hide()
       }
       this.deleteSong(item)
     },
-    scrollToCurrent(current){
+    scrollToCurrent(current) {
       //滚动到current-song
-      const index= this.sequenceList.findIndex((song)=>{
+      const index = this.sequenceList.findIndex((song) => {
         return song.id === current.id //！！！判断是===
       })
       console.log(index);
-      this.$refs.listContent.scrollToElement(this.$refs.listItem[index],300)
+      this.$refs.listContent.scrollToElement(this.$refs.listItem[index], 300)
     },
     selectItem(item, index) {
       if (this.mode === playMode.random) {
@@ -126,10 +126,10 @@ export default {
     },
     show() {
       this.showFlag = true
-      setTimeout(()=>{
+      setTimeout(() => {
         this.$refs.listContent.refresh()
         this.scrollToCurrent(this.currentSong)
-      },this.refreshDelay)
+      }, this.refreshDelay)
 
       // this.$nextTick(() => {
       //   //在dom更新后再refresh
