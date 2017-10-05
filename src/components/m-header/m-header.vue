@@ -2,14 +2,14 @@
   <div class="m-header">
     <div class="icon"></div>
     <h1 class="text">Vue Music Player</h1>
-    <router-link tag="div" class="mine" to="/user">
+    <router-link to="/user" tag="div" class="mine">
       <i class="icon-mine"></i>
     </router-link>
   </div>
 </template>
 
 <script >
-  export default {}
+
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
