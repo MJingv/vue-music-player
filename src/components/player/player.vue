@@ -59,9 +59,7 @@
             <i class="icon-next" @click="next"></i>
           </div>
           <div class="icon i-right">
-            <i class="icon"
-            @click="toggleFavorite(currentSong)"
-            :class="getFavoriteIcon(currentSong)"></i>
+            <i class="icon" @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
           </div>
         </div>
       </div>
@@ -90,7 +88,7 @@
     </div>
   </transition>
   <playlist ref="playlist"></playlist>
-  <audio ref="audio" :src="currentSong.url" @canplay="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
+  <audio ref="audio" :src="currentSong.url" @play="ready" @error="error" @timeupdate="updateTime" @ended="end"></audio>
 </div>
 </template>
 
@@ -145,7 +143,6 @@ export default {
   created() {
     this.touch = {}
   },
-
   methods: {
     showPlaylist() {
       this.$refs.playlist.show()
@@ -155,7 +152,6 @@ export default {
       const touch = e.touches[0]
       this.touch.startX = touch.pageX
       this.touch.startY = touch.pageY
-
     },
     middleTouchMove(e) {
       const touch = e.touches[0]
@@ -203,14 +199,16 @@ export default {
       console.log(this.touch.percent);
       this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`
       this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
-
       this.$refs.middleL.style.opacity = opacity
       this.$refs.middleL.style[transitionDuration] = `${time}ms`
-
       this.touch.initiated = false
     },
     getLyric() {
       this.currentSong.getLyric().then((lyric) => {
+        if (this.currentSong.lyric !== lyric) {
+          //异步获取歌词可能会导致一个歌曲多个歌词，如果当前歌曲歌词！==获得的歌词，则说明不同步，直接return
+          return
+        }
         this.currentLyric = new Lyric(lyric, this.handleLyric)
         if (this.playing) {
           this.currentLyric.play()
@@ -272,7 +270,6 @@ export default {
     error() {
       //如果歌曲出现错误，直接赋值以免影响之后操作
       this.songReady = true
-
     },
     ready() {
       //避免快速点击触发dom异常
@@ -285,20 +282,19 @@ export default {
       }
       if (this.playlist.length === 1) {
         this.loop()
+        return
       } else {
         let index = this.currentIndex + 1
         if (index === this.playlist.length) {
           index = 0
         }
         this.setCurrentIndex(index)
-
         if (!this.playing) {
           this.togglePlaying()
         }
+
         this.songReady = false
-
       }
-
     },
     prev() {
       if (!this.songReady) {
@@ -306,20 +302,17 @@ export default {
       }
       if (this.playlist.length === 1) {
         this.loop()
-
+        return 
       } else {
         let index = this.currentIndex + 1
         if (index === this.playlist.length) {
           index = 0
         }
         this.setCurrentIndex(index)
-
         if (!this.playing) {
           this.togglePlaying()
         }
         this.songReady = false
-
-
       }
       let index = this.currentIndex - 1
       if (index === -1) {
@@ -330,7 +323,6 @@ export default {
         this.togglePlaying()
       }
       this.songReady = false
-
     },
     back() {
       this.setFullScreen(false)
@@ -360,11 +352,9 @@ export default {
         },
         60: {
           transform: `translate3d(0,0,0) scale(1.1)`
-
         },
         100: {
           transform: `translate3d(0,0,0) scale(1)`
-
         },
       }
       animations.registerAnimation({
@@ -373,7 +363,6 @@ export default {
         presets: {
           duration: 400,
           easing: 'linear',
-
         }
       })
       animations.runAnimation(this.$refs.cdWrapper, 'move', done)
@@ -416,10 +405,8 @@ export default {
     },
     ...mapMutations({
       setFullScreen: 'SET_FULL_SCREEN',
-
     }),
     ...mapActions(['savePlayHistory'])
-
   },
   watch: {
     currentSong(newSong, oldSong) {
@@ -433,33 +420,22 @@ export default {
         //切换歌曲时清除定时器
         this.currentLyric.stop()
       }
-      // this.$nextTick(() => {
-      //   //dom完成后的回调
-      //   this.$refs.audio.play()
-      //   this.getLyric()
-      // })
-
       //微信后台调用bug修复
-      setTimeout(() => {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
         //dom完成后的回调
         this.$refs.audio.play()
         this.getLyric()
       }, 1000)
-
-
     },
-
     playing(newPlaying) {
       this.$nextTick(() => {
         const audio = this.$refs.audio
         newPlaying ? audio.play() : audio.pause()
       })
-
     }
   },
   computed: {
-
-
     percent() {
       return this.currentTime / this.currentSong.duration
     },
@@ -480,11 +456,9 @@ export default {
       'fullScreen',
       'playing'
     ])
-
   }
 }
 </script>
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
