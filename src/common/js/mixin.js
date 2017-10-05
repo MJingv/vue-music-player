@@ -36,16 +36,33 @@ export const playerMixin = {
           : 'icon-random'
     },
     ...mapGetters([
-
       'playlist',
       'currentSong',
-
+      'favoriteList',
       'currentIndex',
       'mode',
       'sequenceList'
     ])
   },
   methods: {
+    isFavorite(song) {
+      //output:boolean
+      //判断当前歌曲是不是在favorite-list中
+      const index = this.favoriteList.findIndex((item) => {
+        return song.id === item.id
+      })
+      return index > -1
+    },
+    getFavoriteIcon(song) {
+      return this.isFavorite(song)?'icon-favorite':'icon-not-favorite'
+    },
+    toggleFavorite(song) {
+      if(this.isFavorite(song)){
+        this.deleteFavoriteList(song)
+      }else{
+        this.saveFavoriteList(song)
+      }
+    },
     changeMode() {
       const mode = (this.mode + 1) % 3
       this.setPlayMode(mode)
@@ -68,13 +85,14 @@ export const playerMixin = {
       })
       this.setCurrentIndex(index)
     },
-    ...mapMutations({setPlayingState: 'SET_PLAYING_STATE', setCurrentIndex: 'SET_CURRENT_INDEX', setPlayMode: 'SET_PLAY_MODE', setPlaylist: 'SET_PLAYLIST'})
+    ...mapMutations({setPlayingState: 'SET_PLAYING_STATE', setCurrentIndex: 'SET_CURRENT_INDEX', setPlayMode: 'SET_PLAY_MODE', setPlaylist: 'SET_PLAYLIST'}),
+    ...mapActions(['saveFavoriteList', 'deleteFavoriteList'])
   }
 }
 
 export const searchMixin = {
   data() {
-    return {query: '',refreshDelay:100}
+    return {query: '', refreshDelay: 100}
   },
   computed: {
     ...mapGetters(['searchHistory'])
