@@ -32,23 +32,26 @@ better-scroll  ---  优化移动端滚动事件
 create-keyframe-animation  ---  利用js钩子实现动画，用js实现css3的效果
 js-base64  ---  解析base64歌词编码
 lyric-parser  ---  将歌词数据转换成被解析的类
+
 ```
 
 
 ```
+!!!!mark!!!
+
 基础组件
   ...
 
 
 业务组件
-music-list  ---  封装css3各浏览器等prefixStyle 
+music-list  ---  封装css3各浏览器等prefixStyle
                  优化歌手歌曲列表的bg-img的scale放大缩小、blur动态高斯模糊、动态旋转隐藏信息等交互操作
   
   
 页面实现：
 
 recommend-page  ---  自定义首页轮播图、复用music-list组件展示热门歌单推荐、实现对应路由跳转
-                     
+                    
 
 player-page ---  有全屏播放器和mini播放器
             播放、暂停、前进、后退、播放模式选择等功能
@@ -57,13 +60,23 @@ player-page ---  有全屏播放器和mini播放器
             vue-transtion动画钩子
             create-keyframe-animation（js钩子实现css3动画）
             css3 animation和transition
-            
+
             歌词部分：解析歌词为正确格式并使歌词跟随音乐播放实时滚动
             
 
             修复连续切换出现无法显示的bug（url没有ready）
-        
+
 rank-page  ---   复用music-list组件，从props传值，增加rank独有样式
+
+
+```
+
+
+```
+
+总结收获
+
+...组件化、模块化的实践...
 
 
 ```

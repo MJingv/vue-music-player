@@ -10,7 +10,9 @@ import store from './store'
 // Vue.config.productionTip = false
 
 import 'common/stylus/index.styl'
+import vConsole from 'vconsole'
 
+console.log('test');
 
 fastclick.attach(document.body)
 
