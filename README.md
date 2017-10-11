@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/MJingv/vue-music-player.svg?branch=master)](https://travis-ci.org/MJingv/vue-music-player)
+
 # vue-test-project
 
 > A Vue.js project
