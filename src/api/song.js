@@ -7,6 +7,12 @@ export function getLyric(mid) {
   const url = "/api/lyric"
 
   const data = Object.assign({}, commonParams, {
+    guid:8892713360,
+    uin: 0,
+
+
+
+
     platform: 'yqq',
     pcachetime :+ new Date(),
     songmid: mid,
