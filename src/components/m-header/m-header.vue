@@ -1,14 +1,17 @@
 <template>
   <div class="m-header">
-    <div class="icon"></div>
+    <div class="logo"></div>
     <h1 class="text">Vue Music Player</h1>
     <router-link to="/user" tag="div" class="mine">
       <i class="icon-mine"></i>
     </router-link>
+    <router-link to="/search" tag="div" class="search">
+      <i class="icon-search"></i>
+    </router-link>
   </div>
 </template>
 
-<script >
+<script>
 
 </script>
 
@@ -22,7 +25,7 @@
     text-align: center
     color: $color-theme
     font-size: 0
-    .icon
+    .logo
       display: inline-block
       vertical-align: top
       margin-top: 6px
@@ -39,10 +42,20 @@
     .mine
       position: absolute
       top: 0
-      right: 0
+      left: 0
       .icon-mine
         display: block
         padding: 12px
         font-size: 20px
         color: $color-theme
+    .search
+      position: absolute
+      top: 0
+      right: 0
+      .icon-search
+        display: block
+        padding: 10px
+        font-size: 25px
+        color: $color-theme
+
 </style>
