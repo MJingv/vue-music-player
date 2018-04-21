@@ -1,8 +1,13 @@
 <template>
+  <transition name="slide">
 <div class="singer" ref = 'singer'>
+  <div class="back">
+    <i class="icon-right" @click='back'></i>
+  </div>
   <list-view @select="selectSinger" :data="singers" ref="list"></list-view>
   <router-view></router-view>
 </div>
+  </transition>
 </template>
 
 <script >
@@ -36,6 +41,9 @@ export default {
     this._getSingerList()
   },
   methods: {
+    back() {
+      this.$router.back()
+    },
     handlePlaylist(playlist) {
       let bottom = playlist.length > 0 ? '60px' : ''
       this.$refs.singer.style.bottom = bottom
@@ -118,12 +126,28 @@ export default {
   },
 }
 </script>
-
-
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
   .singer
     position: fixed
-    top: 88px
+    top: 0px
     bottom: 0
     width: 100%
+    z-index: 200
+    &.slide-enter-active, &.slide-leave-active
+      transition: all 0.3s
+    &.slide-enter, &.slide-leave-to
+      transform: translate3d(100%, 0, 0)
+    .back
+      position absolute
+      top: 0
+      right: 6px
+      z-index: 50
+      .icon-right
+        display: block
+        padding: 5px
+        font-size: $font-size-large-x
+        color: $color-theme
+
+
 </style>

@@ -37,10 +37,7 @@
         </scroll>
       </div>
       <div class="bottom">
-        <div class="dot-wrapper">
-          <span class="dot" :class="{'active': currentShow === 'cd'}"></span>
-          <span class="dot" :class="{'active': currentShow === 'lyric'}">></span>
-        </div>
+
         <div class="progress-wrapper">
           <span class="time time-l">{{format(currentTime)}}</span>
           <div class="progress-bar-wrapper">
@@ -180,7 +177,7 @@ export default {
       let opacity
       if (this.currentShow === 'cd') {
         //r->l
-        if (this.touch.percent > 0.1) {
+        if (this.touch.percent > 0.01) {
           //如果向左滑动超过10%则
           offsetWidth = -window.innerWidth
           opacity = 0
@@ -190,7 +187,7 @@ export default {
         }
       } else {
         //l->r
-        if (this.touch.percent < 0.9) {
+        if (this.touch.percent < 0.99) {
           //如果向右滑动超过10%则
           offsetWidth = 0
           this.currentShow = 'cd'

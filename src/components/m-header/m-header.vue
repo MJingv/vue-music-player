@@ -3,11 +3,8 @@
     <div class="logo"></div>
     <h1 class="text">Wolverine Music Player</h1>
     <router-link to="/user" tag="div" class="mine">
-      <i class="icon-mine"></i>
-    </router-link>
-    <router-link to="/search" tag="div" class="search">
-      <i class="icon-search"></i>
-    </router-link>
+    <i class="icon-mine"></i>
+  </router-link>
   </div>
 </template>
 

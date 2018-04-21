@@ -1,118 +1,123 @@
 <template>
-<div class="search">
-  <div class="search-box-wrapper">
-    <search-box ref="searchBox" @query="onQueryChange"></search-box>
-  </div>
-  <div class="shortcut-wrapper" ref="shortcutWrapper" v-show='!query'>
-    <scroll :refreshDelay="refreshDelay" class="shortcut" :data="shortcut" ref='shortcut'>
-      <div>
-        <div class="hot-key">
-          <h1 class="title">热门搜索</h1>
-          <ul>
-            <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
-              <span>{{item.k}}</span>
-            </li>
-          </ul>
-        </div>
-        <div class="search-history" v-show="searchHistory.length">
-          <h1 class="title">
-        <span class="text">历史记录</span>
-        <span class="clear" @click="showConfirm">
+  <div class="search">
+    <router-link to="/singer" tag="div" class="mine">
+      <div class="singer-entrance">
+        <div><i class="icon-singer"></i>歌手分类<i class="icon-right"></i></div>
+      </div>
+    </router-link>
+    <div class="search-box-wrapper">
+      <search-box ref="searchBox" @query="onQueryChange"></search-box>
+    </div>
+    <div class="shortcut-wrapper" ref="shortcutWrapper" v-show='!query'>
+      <scroll :refreshDelay="refreshDelay" class="shortcut" :data="shortcut" ref='shortcut'>
+        <div>
+          <div class="hot-key">
+            <h1 class="title">热门搜索</h1>
+            <ul>
+              <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
+                <span>{{item.k}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="search-history" v-show="searchHistory.length">
+            <h1 class="title">
+              <span class="text">历史记录</span>
+              <span class="clear" @click="showConfirm">
           <i class="icon-clear"></i>
         </span>
-        </h1>
-          <search-list :searches="searchHistory" @select="addQuery" @delete="deleteSearchHistory">
-          </search-list>
+            </h1>
+            <search-list :searches="searchHistory" @select="addQuery" @delete="deleteSearchHistory">
+            </search-list>
+          </div>
         </div>
-      </div>
-    </scroll>
+      </scroll>
+    </div>
+    <div class="search-result" ref="searchResult" v-show='query'>
+      <suggest :query="query" @listScroll="blurInput" ref="suggest" @select='saveSearch'></suggest>
+    </div>
+    <confirm ref='confirm' text="clear all ?" confirmBtnText="clear" @confirm="clearSearchHistory"></confirm>
+    <router-view></router-view>
   </div>
-  <div class="search-result" ref="searchResult" v-show='query'>
-    <suggest :query="query" @listScroll="blurInput" ref="suggest" @select='saveSearch'></suggest>
-  </div>
-  <confirm ref='confirm' text="clear all ?" confirmBtnText="clear" @confirm="clearSearchHistory"></confirm>
-  <router-view></router-view>
-</div>
 </template>
 
 <script type="text/ecmascript-6">
-import SearchBox from 'base/search-box/search-box.vue'
-import {
-  getHotKey
-} from 'api/search'
-import {
-  ERR_OK
-} from 'api/config'
-import {
-  mapActions,
-  mapGetters
-} from 'vuex'
-import Suggest from 'components/suggest/suggest'
-import SearchList from 'base/search-list/search-list'
-import Confirm from 'base/confirm/confirm'
-import Scroll from 'base/scroll/scroll'
-import {
-  playlistMixin
-} from 'common/js/mixin'
-import {searchMixin} from 'common/js/mixin'
+  import SearchBox from 'base/search-box/search-box.vue'
+  import {
+    getHotKey
+  } from 'api/search'
+  import {
+    ERR_OK
+  } from 'api/config'
+  import {
+    mapActions,
+    mapGetters
+  } from 'vuex'
+  import Suggest from 'components/suggest/suggest'
+  import SearchList from 'base/search-list/search-list'
+  import Confirm from 'base/confirm/confirm'
+  import Scroll from 'base/scroll/scroll'
+  import {
+    playlistMixin
+  } from 'common/js/mixin'
+  import {searchMixin} from 'common/js/mixin'
 
-export default {
-  mixins: [playlistMixin,searchMixin],
-  data() {
-    return {
-      hotKey: [],
-    }
-  },
-  computed: {
-    shortcut() {
-      return this.hotKey.concat(this.searchHistory)
-    },
-
-  },
-  watch: {
-    query(newQuery) {
-      if (!newQuery) {
-        setTimeout(() => {
-          this.$refs.shortcut.refresh()
-        }, 20)
+  export default {
+    mixins: [playlistMixin, searchMixin],
+    data() {
+      return {
+        hotKey: [],
       }
-    }
-  },
-  methods: {
-    showConfirm() {
-      this.$refs.confirm.show()
     },
+    computed: {
+      shortcut() {
+        return this.hotKey.concat(this.searchHistory)
+      },
 
-    _getHotKey() {
-      getHotKey().then((res) => {
-        if (res.code === ERR_OK) {
-        //截取前十个数据
-          this.hotKey = res.data.hotkey.slice(0, 10)
+    },
+    watch: {
+      query(newQuery) {
+        if (!newQuery) {
+          setTimeout(() => {
+            this.$refs.shortcut.refresh()
+          }, 20)
         }
-      })
+      }
     },
-    handlePlaylist(playlist) {
-      const bottom = playlist.length > 0 ? '60px' : ''
-      this.$refs.shortcutWrapper.style.bottom = bottom
-      this.$refs.shortcut.refresh()
-      this.$refs.searchResult.style.bottom = bottom
-      this.$refs.suggest.refresh()
+    methods: {
+      showConfirm() {
+        this.$refs.confirm.show()
+      },
+
+      _getHotKey() {
+        getHotKey().then((res) => {
+          if (res.code === ERR_OK) {
+            //截取前十个数据
+            this.hotKey = res.data.hotkey.slice(0, 10)
+          }
+        })
+      },
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.shortcutWrapper.style.bottom = bottom
+        this.$refs.shortcut.refresh()
+        this.$refs.searchResult.style.bottom = bottom
+        this.$refs.suggest.refresh()
+      },
+      ...mapActions([
+        'clearSearchHistory'
+      ])
     },
-    ...mapActions([
-       'clearSearchHistory'
-    ])
-  },
-  created() {
-    this._getHotKey()
-  },
-  components: {
-    SearchBox,
-    Suggest,
-    SearchList,
-    Confirm,
-    Scroll,
+    created() {
+      this._getHotKey()
+    },
+    components: {
+      SearchBox,
+      Suggest,
+      SearchList,
+      Confirm,
+      Scroll,
+    }
   }
-}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -120,6 +125,14 @@ export default {
   @import "~common/stylus/mixin"
 
   .search
+    .singer-entrance
+      display: flex;
+      justify-content: center;
+      margin 5px
+      div
+        border 2px solid $color-theme-d;
+        padding 5px
+        border-radius 20px
     .title
       height: 65px
       line-height: 65px

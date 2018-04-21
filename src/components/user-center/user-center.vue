@@ -1,11 +1,9 @@
 <template>
 <transition name="slide">
   <div class="user-center">
-
     <div class="back">
       <i class="icon-back" @click='back'></i>
     </div>
-
     <div class="switches-wrapper">
       <switches @switch="selectItem" :switches="switches" :currentIndex="currentIndex"></switches>
     </div>
