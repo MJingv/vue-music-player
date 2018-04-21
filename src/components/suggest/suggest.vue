@@ -128,7 +128,7 @@ export default {
     getIconCls(item) {
       if (item.type === TYPE_SINGER) {
         //歌手icon
-        return 'icon-mine'
+        return 'icon-singer'
       } else {
         //歌曲icon
         return 'icon-music'
