@@ -11,21 +11,19 @@
             </div>
           </slider>
         </div>
-
         <div class="newest-list">
           <h1 class="list-title">最新歌曲</h1>
-          <ul>
-            <li class="item" v-for="item in topList" @click="selectItem(item)">
-              <ul class="songlist">
-                <li class="song" v-for="(song,index) in item.songList">
-                  <span>{{`${index+1} ${song.songname} - ${song.singername}`}}</span>
-                  <span></span>
-                </li>
-              </ul>
-            </li>
-          </ul>
+            <slider v-for="item in topList" class="list-group" interval=3000>
+              <li class="song" v-for="(song,index) in item.songList">
+                <span>{{` ${song.songname} - ${song.singername}`}}</span>
+                <span></span>
+              </li>
+              <li class="song" v-for="(song,index) in item.songList">
+                <span>{{` ${song.songname} - ${song.singername}`}}</span>
+                <span></span>
+              </li>
+            </slider>
         </div>
-
         <div class="recommend-list">
           <h1 class="list-title">推荐歌单</h1>
           <ul class="item-group">
@@ -92,25 +90,19 @@
     methods: {
       _getTopList() {
         getTopList().then((res) => {
-
           if (res.code === ERR_OK) {
             this.topList = res.data.topList
-
           }
         })
 
       },
-      selectItem(item) {
-        this.$router.push({
-          path: `/recommend/${item.dissid}`
-        })
-        this.setDisc(item)
-      },
+
       handlePlaylist(playlist) {
         let bottom = playlist.length > 0 ? '60px' : ''
         this.$refs.recommend.style.bottom = bottom
         this.$refs.scroll.refresh()
       },
+
       _getRecommend() {
         getRecommend().then((res) => {
           if (res.code === ERR_OK) {
@@ -181,7 +173,6 @@
         position: relative
         width: 100%
         overflow: hidden
-      .newest-list
         .songlist
           flex: 1
           display: flex
@@ -196,8 +187,12 @@
           .song
             no-wrap()
             line-height: 26px
+      .newest-list
+        .list-group
+          color:  $color-text-d
+          font-size: $font-size-small
+          background: $color-highlight-background
       .recommend-list
-
         .item-group
           display: flex;
           flex-wrap: wrap;

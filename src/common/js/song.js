@@ -44,7 +44,9 @@ export function createSong (musicData) {
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.albummid}.jpg?max_age=2592000`,
     // url: `http://ws.stream.qqmusic.qq.com/${musicData.songid}.m4a?fromtag=46`
     // url: `http://dl.stream.qqmusic.qq.com/C400000Fc2iQ4eBEei.m4a?guid=8892713360&vkey=541E1E16A42EE7FD88406A8B098E8100CBE9EC6AAA838C74AB908BD6FD0A834E23454ADA29EBF8424A24221B92D105ACF2BC6BE6AC0D0484&uin=0&fromtag=38`
-    url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?guid=8892713360&vkey=541E1E16A42EE7FD88406A8B098E8100CBE9EC6AAA838C74AB908BD6FD0A834E23454ADA29EBF8424A24221B92D105ACF2BC6BE6AC0D0484&uin=0&fromtag=40`
+    url:`http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?guid=8892713360&vkey=53A36627BD596AF3181AD194F8F7D18952C32DEAAE2143556F55EC33BC7DFDC996F09D76CD21BFF952C36BDB4288E99C43770C88260D3041&uin=0&fromtag=38`
+
+    // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.songmid}.m4a?guid=8892713360&vkey=541E1E16A42EE7FD88406A8B098E8100CBE9EC6AAA838C74AB908BD6FD0A834E23454ADA29EBF8424A24221B92D105ACF2BC6BE6AC0D0484&uin=0&fromtag=40`
   })
 }
 
@@ -60,7 +62,9 @@ export function createRecomSong (musicData) {
     image: `https://y.gtimg.cn/music/photo_new/T002R300x300M000${musicData.album.mid}.jpg?max_age=2592000`,
     // url: `http://ws.stream.qqmusic.qq.com/${musicData.id}.m4a?fromtag=46`
     // url: `http://dl.stream.qqmusic.qq.com/C400000Fc2iQ4eBEei.m4a?guid=8892713360&vkey=541E1E16A42EE7FD88406A8B098E8100CBE9EC6AAA838C74AB908BD6FD0A834E23454ADA29EBF8424A24221B92D105ACF2BC6BE6AC0D0484&uin=0&fromtag=38`
-    url: `http://dl.stream.qqmusic.qq.com/C400${musicData.mid}.m4a?guid=8892713360&vkey=541E1E16A42EE7FD88406A8B098E8100CBE9EC6AAA838C74AB908BD6FD0A834E23454ADA29EBF8424A24221B92D105ACF2BC6BE6AC0D0484&uin=0&fromtag=40`
+    // url: `http://dl.stream.qqmusic.qq.com/C400${musicData.mid}.m4a?guid=8892713360&vkey=541E1E16A42EE7FD88406A8B098E8100CBE9EC6AAA838C74AB908BD6FD0A834E23454ADA29EBF8424A24221B92D105ACF2BC6BE6AC0D0484&uin=0&fromtag=40`
+    url:`http://dl.stream.qqmusic.qq.com/C400${musicData.mid}.m4a?guid=8892713360&vkey=53A36627BD596AF3181AD194F8F7D18952C32DEAAE2143556F55EC33BC7DFDC996F09D76CD21BFF952C36BDB4288E99C43770C88260D3041&uin=0&fromtag=38`
+
   })
 }
 
