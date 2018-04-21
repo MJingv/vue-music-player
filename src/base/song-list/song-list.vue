@@ -4,7 +4,7 @@
   <ul>
     <li @click="selectItem(song, index)" class="item" v-for="(song, index) in songs">
       <div class="rank" v-show="rank">
-        <span :class="getRankCls(index)">{{getRankText(index)}}</span>
+        <span >{{index+1}}</span>
       </div>
       <div class="content">
         <h2 class="name">{{song.name}}</h2>
@@ -38,15 +38,15 @@ export default {
       }
 
     },
-    getRankCls(index) {
-      if (index < 3) {
-        // 前三名显示奖杯图片
-        return `icon icon${index}`
-      }else{
-        return 'text'
-      }
-
-    },
+    // getRankCls(index) {
+    //   if (index < 3) {
+    //     // 前三名显示奖杯图片
+    //     return `icon icon${index}`
+    //   }else{
+    //     return 'text'
+    //   }
+    //
+    // },
     selectItem(item, index) {
       this.$emit('select', item, index)
     },

@@ -10,10 +10,7 @@
       <switches @switch="selectItem" :switches="switches" :currentIndex="currentIndex"></switches>
     </div>
 
-    <div class="play-btn" ref="playBtn">
-      <i class="icon-play"></i>
-      <span class="text" @click="random">随机播放全部</span>
-    </div>
+    <div class="play-btn" ref="playBtn"></div>
 
     <div class="list-wrapper" ref="listWrapper">
       <scroll ref="favoriteList" class="list-scroll" v-if="currentIndex === 0"  :data="favoriteList">
@@ -124,18 +121,18 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
-
+  @import "~common/stylus/mixin"
   .user-center
     position: fixed
     top: 0
     bottom: 0
     z-index: 100
-    width: 100%
-    background: $color-background
+    width: 70%
+    background:$color-theme
     &.slide-enter-active, &.slide-leave-active
       transition: all 0.3s
     &.slide-enter, &.slide-leave-to
-      transform: translate3d(100%, 0, 0)
+      transform: translate3d(-100%, 0, 0)
     .back
       position absolute
       top: 0
@@ -145,19 +142,18 @@ export default {
         display: block
         padding: 10px
         font-size: $font-size-large-x
-        color: $color-theme
+        color: color-background
     .switches-wrapper
       margin: 10px 0 30px 0
     .play-btn
+      bg-image('logo')
       box-sizing: border-box
-      width: 135px
-      padding: 7px 0
-      margin: 0 auto
-      text-align: center
-      border: 1px solid  $color-text-l
-      color: $color-text-l
-      border-radius: 100px
-      font-size: 0
+      margin-left:80px
+      width: 90px
+      height :90px
+      border: 1px solid  $color-background
+      color: $color-background-d
+      border-radius: 50%
       .icon-play
         display: inline-block
         vertical-align: middle
@@ -176,7 +172,7 @@ export default {
         height: 100%
         overflow: hidden
         .list-inner
-          padding: 20px 30px
+          padding: 70px 30px
     .no-result-wrapper
       position: absolute
       width: 100%

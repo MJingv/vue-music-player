@@ -11,19 +11,7 @@
             </div>
           </slider>
         </div>
-        <div class="newest-list">
-          <h1 class="list-title">最新歌曲</h1>
-            <slider v-for="item in topList" class="list-group" interval=3000>
-              <li class="song" v-for="(song,index) in item.songList">
-                <span>{{` ${song.songname} - ${song.singername}`}}</span>
-                <span></span>
-              </li>
-              <li class="song" v-for="(song,index) in item.songList">
-                <span>{{` ${song.songname} - ${song.singername}`}}</span>
-                <span></span>
-              </li>
-            </slider>
-        </div>
+
         <div class="recommend-list">
           <h1 class="list-title">推荐歌单</h1>
           <ul class="item-group">

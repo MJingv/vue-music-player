@@ -138,7 +138,7 @@ export default {
         height: 16px;
         background-color: $color-theme;
     .search-box-wrapper
-      margin: 20px
+      margin: 20px 0px
     .shortcut-wrapper
       position: fixed
       top: 178px

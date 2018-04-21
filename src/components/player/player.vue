@@ -506,12 +506,12 @@ export default {
           text-align: center
           no-wrap()
           font-size: $font-size-large
-          color: $color-text
+          color: $color-background
         .subtitle
           line-height: 20px
           text-align: center
           font-size: $font-size-medium
-          color: $color-text
+          color: $color-background
       .middle
         position: fixed
         width: 100%
@@ -668,12 +668,6 @@ export default {
         flex: 0 0 40px
         width: 40px
         padding: 0 10px 0 20px
-        img
-          border-radius: 50%
-          &.play
-            animation: rotate 10s linear infinite
-          &.pause
-            animation-play-state: paused
       .text
         display: flex
         flex-direction: column
@@ -696,7 +690,7 @@ export default {
         padding: 0 10px
         .icon-play-mini, .icon-pause-mini, .icon-playlist
           font-size: 30px
-          color: $color-theme-d
+          color: $color-theme
         .icon-mini
           font-size: 32px
           position: absolute

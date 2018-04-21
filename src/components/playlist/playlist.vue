@@ -25,12 +25,12 @@
           </li>
         </transition-group>
       </scroll>
-      <div class="list-operate">
-        <div class="add" @click="addSong">
-          <i class="icon-add"></i>
-          <span class="text">添加歌曲到列表</span>
-        </div>
-      </div>
+      <!--<div class="list-operate">-->
+        <!--<div class="add" @click="addSong">-->
+          <!--<i class="icon-add"></i>-->
+          <!--<span class="text">添加歌曲到列表</span>-->
+        <!--</div>-->
+      <!--</div>-->
       <div class="list-close" @click="hide">
         <span>关闭</span>
       </div>

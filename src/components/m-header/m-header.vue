@@ -1,7 +1,7 @@
 <template>
   <div class="m-header">
     <div class="logo"></div>
-    <h1 class="text">Vue Music Player</h1>
+    <h1 class="text">Wolverine Music Player</h1>
     <router-link to="/user" tag="div" class="mine">
       <i class="icon-mine"></i>
     </router-link>
