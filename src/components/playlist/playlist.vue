@@ -2,6 +2,9 @@
 <transition name='list-fade'>
   <div class="playlist" v-show="showFlag" @click="hide">
     <div class="list-wrapper" @click.stop>
+      <div class="list-close" @click="hide">
+        <i class="icon-close"></i>
+      </div>
       <div class="list-header">
         <h1 class="title">
             <i class="icon" :class="iconMode" @click="changeMode"></i>
@@ -31,9 +34,7 @@
           <!--<span class="text">添加歌曲到列表</span>-->
         <!--</div>-->
       <!--</div>-->
-      <div class="list-close" @click="hide">
-        <span>关闭</span>
-      </div>
+
     </div>
     <confirm ref="confirm" text="确定清空播放列表吗?" confirmBtnText="清空" @confirm="confirmClear"></confirm>
     <add-song ref="addSong"></add-song>
@@ -160,7 +161,7 @@ export default {
     top: 0
     bottom: 0
     z-index: 200
-    background-color: $color-background-d
+    background-color: $color-highlight-background
     &.list-fade-enter-active, &.list-fade-leave-active
       transition: opacity 0.3s
       .list-wrapper
@@ -175,7 +176,7 @@ export default {
       left: 0
       bottom: 0
       width: 100%
-      background-color: $color-highlight-background
+      background-color: $color-background
       .list-header
         position: relative
         padding: 20px 30px 10px 20px

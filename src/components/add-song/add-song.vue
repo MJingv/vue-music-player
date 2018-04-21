@@ -164,6 +164,7 @@ export default {
         position: absolute
         top: 165px
         bottom: 0
+        height :100%
         width: 100%
         .list-scroll
           height: 100%

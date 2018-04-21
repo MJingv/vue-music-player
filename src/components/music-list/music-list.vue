@@ -8,8 +8,7 @@
   <div class="bg-image" :style="bgStyle" ref='bgImage'>
     <div class="play-wrapper">
       <div class="play" v-show="songs.length>0" ref="playBtn" @click="random">
-        <i class="icon-play"></i>
-        <span class="text">随机播放全部</span>
+        <span class="text"></span>
       </div>
     </div>
     <div class="filter" ref="filter">
@@ -216,7 +215,6 @@ export default {
           padding: 7px 0
           margin: 0 auto
           text-align: center
-          border: 1px solid $color-theme
           color: $color-theme
           border-radius: 100px
           font-size: 0

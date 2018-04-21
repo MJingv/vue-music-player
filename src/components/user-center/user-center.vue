@@ -126,7 +126,7 @@ export default {
     position: fixed
     top: 0
     bottom: 0
-    z-index: 100
+    z-index: 200
     width: 70%
     background:$color-theme
     &.slide-enter-active, &.slide-leave-active
