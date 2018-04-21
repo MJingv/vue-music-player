@@ -120,6 +120,23 @@ export default {
   @import "~common/stylus/mixin"
 
   .search
+    .title
+      height: 65px
+      line-height: 65px
+      text-align: left
+      font-size: $font-size-medium-x
+      color: $color-text
+      position: relative;
+      padding-left: 9px;
+      &::after
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        margin-top: -9px;
+        width: 1%;
+        height: 16px;
+        background-color: $color-theme;
     .search-box-wrapper
       margin: 20px
     .shortcut-wrapper
@@ -132,10 +149,6 @@ export default {
         overflow: hidden
         .hot-key
           margin: 0 20px 20px 20px
-          .title
-            margin-bottom: 20px
-            font-size: $font-size-medium
-            color: $color-text-l
           .item
             display: inline-block
             padding: 5px 10px
