@@ -1,6 +1,6 @@
 <template>
 <transition name="slide">
-  <div class="user-center">
+  <div class="user-center" >
     <div class="back">
       <i class="icon-back" @click='back'></i>
     </div>
@@ -138,10 +138,11 @@ export default {
       z-index: 50
       .icon-back
         display: block
-        padding: 10px
+        padding: 12px
         font-size: $font-size-large-x
-        color: color-background
+        color: $color-background
     .switches-wrapper
+
       margin: 10px 0 30px 0
     .play-btn
       bg-image('logo')

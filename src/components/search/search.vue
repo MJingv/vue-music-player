@@ -11,14 +11,6 @@
     <div class="shortcut-wrapper" ref="shortcutWrapper" v-show='!query'>
       <scroll :refreshDelay="refreshDelay" class="shortcut" :data="shortcut" ref='shortcut'>
         <div>
-          <div class="hot-key">
-            <h1 class="title">热门搜索</h1>
-            <ul>
-              <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
-                <span>{{item.k}}</span>
-              </li>
-            </ul>
-          </div>
           <div class="search-history" v-show="searchHistory.length">
             <h1 class="title">
               <span class="text">历史记录</span>
@@ -29,6 +21,16 @@
             <search-list :searches="searchHistory" @select="addQuery" @delete="deleteSearchHistory">
             </search-list>
           </div>
+
+          <div class="hot-key">
+            <h1 class="title">热门搜索</h1>
+            <ul>
+              <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
+                <span>{{item.k}}</span>
+              </li>
+            </ul>
+          </div>
+
         </div>
       </scroll>
     </div>
@@ -151,7 +153,7 @@
         height: 16px;
         background-color: $color-theme;
     .search-box-wrapper
-      margin: 20px 0px
+      margin:10px 0px
     .shortcut-wrapper
       position: fixed
       top: 178px

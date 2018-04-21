@@ -5,6 +5,7 @@
       <div class="confirm-content">
         <p class="text">{{text}}</p>
         <div class="operate">
+          <div class="placehold"></div>
           <div class="operate-btn left" @click='cancel'>{{cancelBtnText}}</div>
           <div class="operate-btn" @click="confirm">{{confirmBtnText}}</div>
         </div>
@@ -23,11 +24,11 @@ export default {
     },
     confirmBtnText: {
       type: String,
-      default: '确定✅'
+      default: '确定'
     },
     cancelBtnText: {
       type: String,
-      default: '取消❌'
+      default: '取消'
     },
 
   },
@@ -69,7 +70,7 @@ export default {
     top: 0
     bottom: 0
     z-index: 998
-    background-color: $color-background-d
+    background-color:  rgba(0, 0, 0, 0.5)
     &.confirm-fade-enter-active
       animation: confirm-fadein 0.3s
       .confirm-content
@@ -82,28 +83,22 @@ export default {
       z-index: 999
       .confirm-content
         width: 270px
-        border-radius: 13px
-        background: $color-highlight-background
+        background: $color-background
         .text
           padding: 19px 15px
           line-height: 22px
-          text-align: center
-          font-size: $font-size-large
-          color: $color-text-l
+          font-size: $font-size-medium
+          color: $color-text-ll
         .operate
           display: flex
-          align-items: center
-          text-align: center
-          font-size: $font-size-large
+          font-size: $font-size-medium
+          :first-child
+            width:50%
           .operate-btn
-            flex: 1
+            width:25%
             line-height: 22px
             padding: 10px 0
-            border-top: 1px solid $color-background-d
-            color: $color-text-d
-            &.left
-              border-right: 1px solid $color-background-d
-
+            color: $color-theme
   @keyframes confirm-fadein
     0%
       opacity: 0

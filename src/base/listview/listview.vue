@@ -190,7 +190,6 @@ export default {
         .avatar
           width: 50px
           height: 50px
-          border-radius: 50%
         .name
           margin-left: 20px
           color: $color-text-l

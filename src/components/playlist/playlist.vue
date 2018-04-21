@@ -2,13 +2,10 @@
 <transition name='list-fade'>
   <div class="playlist" v-show="showFlag" @click="hide">
     <div class="list-wrapper" @click.stop>
-      <div class="list-close" @click="hide">
-        <i class="icon-close"></i>
-      </div>
       <div class="list-header">
         <h1 class="title">
             <i class="icon" :class="iconMode" @click="changeMode"></i>
-            <span class="text">{{modeText}}</span>
+            <span class="text">{{modeText}} 已有{{this.playlist.length}} 首歌曲</span>
             <span class="clear" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
@@ -28,13 +25,6 @@
           </li>
         </transition-group>
       </scroll>
-      <!--<div class="list-operate">-->
-        <!--<div class="add" @click="addSong">-->
-          <!--<i class="icon-add"></i>-->
-          <!--<span class="text">添加歌曲到列表</span>-->
-        <!--</div>-->
-      <!--</div>-->
-
     </div>
     <confirm ref="confirm" text="确定清空播放列表吗?" confirmBtnText="清空" @confirm="confirmClear"></confirm>
     <add-song ref="addSong"></add-song>
@@ -76,7 +66,15 @@ export default {
       } else {
         this.scrollToCurrent(newSong)
       }
+    },
+    playlist(x){
+      if (!x ){
+        return x
+      }else{
+        return 0
+      }
     }
+
   },
   components: {
     Scroll,
@@ -132,11 +130,6 @@ export default {
         this.scrollToCurrent(this.currentSong)
       }, this.refreshDelay)
 
-      // this.$nextTick(() => {
-      //   //在dom更新后再refresh
-      //   this.$refs.listContent.refresh()
-      //   this.scrollToCurrent(this.currentSong)
-      // })
     },
     hide() {
       this.showFlag = false
@@ -144,6 +137,9 @@ export default {
     ...mapActions([
       'deleteSong',
       'deleteSongList'
+    ]),
+    ...mapGetters([
+      'playlist',
     ])
   },
 

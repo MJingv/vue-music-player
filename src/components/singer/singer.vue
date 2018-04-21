@@ -148,6 +148,4 @@ export default {
         padding: 5px
         font-size: $font-size-large-x
         color: $color-theme
-
-
 </style>
