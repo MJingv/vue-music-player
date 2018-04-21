@@ -15,6 +15,9 @@
       <div class="middle" @touchstart.prevent="middleTouchStart" @touchmove.prevent="middleTouchMove" @touchend="middleTouchEnd">
         <div class="middle-l" ref='middleL'>
           <div class="cd-wrapper" ref="cdWrapper">
+            <div class="bar">
+              <img class="image" src="./bar.png">
+            </div>
             <div class="cd" :class="cdCls">
               <img class="image" :src="currentSong.image">
             </div>
@@ -116,6 +119,7 @@ import Playlist from 'components/playlist/playlist'
 import {
   playerMixin
 } from 'common/js/mixin'
+
 
 const transform = prefixStyle("transform")
 const transitionDuration = prefixStyle("transitionDuration")
@@ -528,11 +532,16 @@ export default {
             top: 0
             width: 80%
             height: 100%
+            .bar
+              position:absolute
+              top:0
+              right:0
+              z-index 5
             .cd
               width: 100%
               height: 100%
               box-sizing: border-box
-              border: 10px solid rgba(255, 255, 255, 0.1)
+              border: 40px solid rgba(0, 0, 0, 0.2)
               border-radius: 50%
               &.play
                 animation: rotate 20s linear infinite
