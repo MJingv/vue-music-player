@@ -76,13 +76,18 @@
     },
 
     methods: {
+      selectItem(item) {
+        this.$router.push({
+          path: `/recommend/${item.dissid}`
+        })
+        this.setDisc(item)
+      },
       _getTopList() {
         getTopList().then((res) => {
           if (res.code === ERR_OK) {
             this.topList = res.data.topList
           }
         })
-
       },
 
       handlePlaylist(playlist) {

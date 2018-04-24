@@ -35,7 +35,6 @@ export default {
     align-items: center
     width: 240px
     margin: 0 auto
-    border: 1px solid $color-highlight-background
     border-radius: 5px
     .switch-item
       flex: 1
@@ -43,7 +42,9 @@ export default {
       text-align: center
       font-size: $font-size-medium
       color: $color-text-d
-      &.active
-        background: $color-highlight-background
-        color: $color-text
+      span
+        padding 5px
+      &.active span
+        border-bottom 2px solid $color-theme
+        color: $color-background
 </style>

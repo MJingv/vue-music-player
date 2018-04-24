@@ -21,23 +21,13 @@
             <search-list :searches="searchHistory" @select="addQuery" @delete="deleteSearchHistory">
             </search-list>
           </div>
-
-          <div class="hot-key">
-            <h1 class="title">热门搜索</h1>
-            <ul>
-              <li class="item" v-for="item in hotKey" @click="addQuery(item.k)">
-                <span>{{item.k}}</span>
-              </li>
-            </ul>
-          </div>
-
         </div>
       </scroll>
     </div>
     <div class="search-result" ref="searchResult" v-show='query'>
       <suggest :query="query" @listScroll="blurInput" ref="suggest" @select='saveSearch'></suggest>
     </div>
-    <confirm ref='confirm' text="clear all ?" confirmBtnText="clear" @confirm="clearSearchHistory"></confirm>
+    <confirm ref='confirm' text="确定清空播放列表吗?" confirmBtnText="清空" @confirm="clearSearchHistory"></confirm>
     <router-view></router-view>
   </div>
 </template>
@@ -179,8 +169,8 @@
             display: flex
             align-items: center
             height: 40px
-            font-size: $font-size-medium
-            color: $color-text-l
+            font-size: $font-size-medium-x
+            color: $color-text-ll
             .text
               flex: 1
             .clear

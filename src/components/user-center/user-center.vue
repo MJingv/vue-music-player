@@ -50,10 +50,10 @@ export default {
     return {
       currentIndex: 0,
       switches: [{
-          name: '我喜欢的'
+          name: '我的收藏'
         },
         {
-          name: '最近听的'
+          name: '播放历史'
         }
       ],
     }
@@ -126,7 +126,7 @@ export default {
     bottom: 0
     z-index: 200
     width: 70%
-    background:$color-theme
+    background:$color-background-d
     &.slide-enter-active, &.slide-leave-active
       transition: all 0.3s
     &.slide-enter, &.slide-leave-to
@@ -142,7 +142,6 @@ export default {
         font-size: $font-size-large-x
         color: $color-background
     .switches-wrapper
-
       margin: 10px 0 30px 0
     .play-btn
       bg-image('logo')

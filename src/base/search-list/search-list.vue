@@ -35,6 +35,7 @@ export default {
   @import "~common/stylus/variable"
 
   .search-list
+    margin-top:20px
     .search-item
       display: flex
       align-items: center

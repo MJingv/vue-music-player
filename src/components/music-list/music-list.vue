@@ -11,8 +11,6 @@
         <span class="text"></span>
       </div>
     </div>
-    <div class="filter" ref="filter">
-    </div>
   </div>
   <div class="bg-layer" ref="layer"> </div>
   <scroll @scroll="scroll" :data="songs" class="list" ref='list' :probe-type="probeType" :listenScroll="listenScroll">

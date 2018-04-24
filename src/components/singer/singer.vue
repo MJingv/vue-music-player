@@ -132,6 +132,7 @@ export default {
     position: fixed
     top: 0px
     bottom: 0
+    height: 100%;
     width: 100%
     z-index: 200
     &.slide-enter-active, &.slide-leave-active

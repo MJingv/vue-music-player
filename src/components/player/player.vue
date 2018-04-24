@@ -603,7 +603,7 @@
       z-index: 180
       width: 100%
       height: 60px
-      background: $color-highlight-background
+      background:$color-background-d
       &.mini-enter-active, &.mini-leave-active
         transition: all 0.4s
       &.mini-enter, &.mini-leave-to
@@ -623,11 +623,11 @@
           margin-bottom: 2px
           no-wrap()
           font-size: $font-size-medium
-          color: $color-text
+          color: $color-text-d
         .desc
           no-wrap()
           font-size: $font-size-small
-          color: $color-text-d
+          color: $color-text
       .control
         flex: 0 0 30px
         width: 30px

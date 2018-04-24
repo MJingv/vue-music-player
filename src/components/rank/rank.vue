@@ -87,7 +87,7 @@
     .toplist
       background-color: $color-highlight-background
       height: 100%
-      overflow: hidden
+      overflow: auto
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
